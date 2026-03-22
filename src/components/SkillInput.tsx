@@ -31,8 +31,8 @@ export default function SkillInput({ skills, onChange, label, variant = 'require
 
   return (
     <div>
-      <label className="block text-sm font-medium text-slate-300 mb-1">{label}</label>
-      <div className="flex flex-wrap gap-1.5 p-2 bg-slate-800 border border-slate-600 rounded-lg min-h-[42px]">
+      <label className="block text-sm font-medium text-stone-600 mb-1">{label}</label>
+      <div className="flex flex-wrap gap-1.5 p-2 frost-input rounded-lg min-h-[42px]">
         {skills.map((skill) => (
           <SkillChip
             key={skill}
@@ -48,7 +48,7 @@ export default function SkillInput({ skills, onChange, label, variant = 'require
           onKeyDown={handleKeyDown}
           onBlur={() => addSkill(input)}
           placeholder={skills.length === 0 ? 'Type and press Enter' : ''}
-          className="flex-1 min-w-[100px] bg-transparent text-sm text-white outline-none placeholder:text-slate-500"
+          className="flex-1 min-w-[100px] bg-transparent text-sm text-stone-800 outline-none placeholder:text-stone-400"
         />
       </div>
     </div>

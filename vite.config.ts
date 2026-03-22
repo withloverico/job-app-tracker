@@ -14,8 +14,8 @@ export default defineConfig({
         name: 'Job Application Tracker',
         short_name: 'Job Tracker',
         description: 'Track your job applications in one place',
-        theme_color: '#0f172a',
-        background_color: '#0f172a',
+        theme_color: '#c9b99a',
+        background_color: '#c9b99a',
         display: 'standalone',
         start_url: '/',
         icons: [

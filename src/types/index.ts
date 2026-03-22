@@ -58,23 +58,23 @@ export const STATUSES: Status[] = [
 ]
 
 export const STATUS_COLORS: Record<Status, string> = {
-  Bookmarked: 'bg-gray-500/20 text-gray-300 border-gray-500/30',
-  Applied: 'bg-blue-500/20 text-blue-300 border-blue-500/30',
-  'Phone Screen': 'bg-yellow-500/20 text-yellow-300 border-yellow-500/30',
-  Interview: 'bg-purple-500/20 text-purple-300 border-purple-500/30',
-  'Final Round': 'bg-orange-500/20 text-orange-300 border-orange-500/30',
-  Offer: 'bg-green-500/20 text-green-300 border-green-500/30',
-  Rejected: 'bg-red-500/20 text-red-300 border-red-500/30',
-  Withdrawn: 'bg-slate-500/20 text-slate-300 border-slate-500/30',
+  Bookmarked: 'bg-stone-500/15 text-stone-700 border-stone-400/30',
+  Applied: 'bg-sky-500/15 text-sky-700 border-sky-400/30',
+  'Phone Screen': 'bg-amber-500/15 text-amber-700 border-amber-400/30',
+  Interview: 'bg-violet-500/15 text-violet-700 border-violet-400/30',
+  'Final Round': 'bg-orange-500/15 text-orange-700 border-orange-400/30',
+  Offer: 'bg-emerald-500/15 text-emerald-700 border-emerald-400/30',
+  Rejected: 'bg-red-500/15 text-red-700 border-red-400/30',
+  Withdrawn: 'bg-slate-500/15 text-slate-600 border-slate-400/30',
 }
 
 export const STATUS_DOT_COLORS: Record<Status, string> = {
-  Bookmarked: 'bg-gray-400',
-  Applied: 'bg-blue-400',
-  'Phone Screen': 'bg-yellow-400',
-  Interview: 'bg-purple-400',
-  'Final Round': 'bg-orange-400',
-  Offer: 'bg-green-400',
-  Rejected: 'bg-red-400',
-  Withdrawn: 'bg-slate-400',
+  Bookmarked: 'bg-stone-500',
+  Applied: 'bg-sky-500',
+  'Phone Screen': 'bg-amber-500',
+  Interview: 'bg-violet-500',
+  'Final Round': 'bg-orange-500',
+  Offer: 'bg-emerald-500',
+  Rejected: 'bg-red-500',
+  Withdrawn: 'bg-slate-500',
 }

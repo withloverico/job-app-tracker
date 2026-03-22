@@ -9,8 +9,8 @@ interface SkillChipProps {
 export default function SkillChip({ skill, onRemove, variant = 'required' }: SkillChipProps) {
   const colors =
     variant === 'required'
-      ? 'bg-indigo-500/20 text-indigo-300 border-indigo-500/30'
-      : 'bg-violet-500/20 text-violet-300 border-violet-500/30'
+      ? 'bg-amber-600/15 text-amber-800 border-amber-400/30'
+      : 'bg-emerald-600/15 text-emerald-800 border-emerald-400/30'
 
   return (
     <span className={`inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs border ${colors}`}>
@@ -19,7 +19,7 @@ export default function SkillChip({ skill, onRemove, variant = 'required' }: Ski
         <button
           type="button"
           onClick={onRemove}
-          className="hover:text-white transition-colors"
+          className="hover:text-stone-900 transition-colors"
         >
           <X className="w-3 h-3" />
         </button>

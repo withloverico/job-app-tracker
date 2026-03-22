@@ -190,15 +190,17 @@ export default function AddJobModal({
       )
     : 0
 
+  const inputClass = "w-full frost-input text-stone-800 rounded-lg px-3 py-2 text-sm placeholder:text-stone-400"
+
   return (
     <div className="fixed inset-0 z-50 flex items-start justify-center p-4 pt-[5vh] overflow-y-auto">
-      <div className="fixed inset-0 bg-black/60" onClick={onClose} />
-      <div className="relative bg-slate-800 border border-slate-700 rounded-xl w-full max-w-2xl shadow-2xl mb-8">
-        <div className="flex items-center justify-between p-4 border-b border-slate-700">
-          <h2 className="text-lg font-semibold text-white">
+      <div className="fixed inset-0 bg-black/30 backdrop-blur-sm" onClick={onClose} />
+      <div className="relative frost-strong rounded-2xl w-full max-w-2xl shadow-xl mb-8">
+        <div className="flex items-center justify-between p-4 border-b border-stone-200/50">
+          <h2 className="text-lg font-semibold text-stone-800">
             {editingApp ? 'Edit Application' : 'Add Application'}
           </h2>
-          <button onClick={onClose} className="text-slate-400 hover:text-white transition-colors">
+          <button onClick={onClose} className="text-stone-400 hover:text-stone-700 transition-colors">
             <X className="w-5 h-5" />
           </button>
         </div>
@@ -206,25 +208,25 @@ export default function AddJobModal({
         <form onSubmit={handleSubmit} className="p-4 space-y-4">
           {!editingApp && (
             <div>
-              <label className="block text-sm font-medium text-slate-300 mb-1">
+              <label className="block text-sm font-medium text-stone-600 mb-1">
                 Job Posting URL
               </label>
               <div className="flex gap-2">
                 <div className="relative flex-1">
-                  <LinkIcon className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
+                  <LinkIcon className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-stone-400" />
                   <input
                     type="url"
                     value={url}
                     onChange={(e) => setUrl(e.target.value)}
                     placeholder="https://..."
-                    className="w-full bg-slate-700 border border-slate-600 text-white rounded-lg pl-9 pr-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 placeholder:text-slate-500"
+                    className={`${inputClass} !pl-9`}
                   />
                 </div>
                 <button
                   type="button"
                   onClick={handleParse}
                   disabled={!url || parsing}
-                  className="px-4 py-2 bg-indigo-600 hover:bg-indigo-500 disabled:opacity-50 disabled:cursor-not-allowed text-white text-sm font-medium rounded-lg transition-colors flex items-center gap-2"
+                  className="px-4 py-2 bg-amber-700 hover:bg-amber-600 disabled:opacity-50 disabled:cursor-not-allowed text-white text-sm font-medium rounded-lg transition-colors flex items-center gap-2 shadow-sm"
                 >
                   {parsing ? (
                     <>
@@ -240,8 +242,8 @@ export default function AddJobModal({
           )}
 
           {showFallback && (
-            <div className="bg-amber-500/10 border border-amber-500/30 rounded-lg p-3">
-              <p className="text-sm text-amber-300 mb-2">
+            <div className="bg-amber-50/80 border border-amber-300/50 rounded-lg p-3">
+              <p className="text-sm text-amber-800 mb-2">
                 This site blocked auto-fill. Paste the job description below instead.
               </p>
               <textarea
@@ -249,13 +251,13 @@ export default function AddJobModal({
                 onChange={(e) => setFallbackText(e.target.value)}
                 rows={4}
                 placeholder="Paste job description here..."
-                className="w-full bg-slate-700 border border-slate-600 text-white rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 placeholder:text-slate-500 resize-none"
+                className={`${inputClass} resize-none`}
               />
               <button
                 type="button"
                 onClick={handleParseFallback}
                 disabled={!fallbackText.trim() || parsing}
-                className="mt-2 px-3 py-1.5 bg-indigo-600 hover:bg-indigo-500 disabled:opacity-50 text-white text-sm rounded-lg transition-colors flex items-center gap-2"
+                className="mt-2 px-3 py-1.5 bg-amber-700 hover:bg-amber-600 disabled:opacity-50 text-white text-sm rounded-lg transition-colors flex items-center gap-2 shadow-sm"
               >
                 {parsing ? (
                   <>
@@ -270,9 +272,9 @@ export default function AddJobModal({
           )}
 
           {duplicate && (
-            <div className="bg-amber-500/10 border border-amber-500/30 rounded-lg p-3 flex items-start gap-2">
-              <AlertTriangle className="w-5 h-5 text-amber-400 flex-shrink-0 mt-0.5" />
-              <div className="text-sm text-amber-300">
+            <div className="bg-amber-50/80 border border-amber-300/50 rounded-lg p-3 flex items-start gap-2">
+              <AlertTriangle className="w-5 h-5 text-amber-600 flex-shrink-0 mt-0.5" />
+              <div className="text-sm text-amber-800">
                 <p>
                   Looks like you may have already added this role at{' '}
                   <strong>{duplicate.application.company_name}</strong> —{' '}
@@ -282,7 +284,7 @@ export default function AddJobModal({
                 </p>
                 <a
                   href={`/job/${duplicate.application.id}`}
-                  className="text-indigo-400 hover:text-indigo-300 underline mt-1 inline-block"
+                  className="text-amber-700 hover:text-amber-900 underline mt-1 inline-block"
                 >
                   View existing entry
                 </a>
@@ -292,41 +294,19 @@ export default function AddJobModal({
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
-              <label className="block text-sm font-medium text-slate-300 mb-1">
-                Company Name *
-              </label>
-              <input
-                type="text"
-                required
-                value={companyName}
-                onChange={(e) => setCompanyName(e.target.value)}
-                className="w-full bg-slate-700 border border-slate-600 text-white rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 placeholder:text-slate-500"
-              />
+              <label className="block text-sm font-medium text-stone-600 mb-1">Company Name *</label>
+              <input type="text" required value={companyName} onChange={(e) => setCompanyName(e.target.value)} className={inputClass} />
             </div>
             <div>
-              <label className="block text-sm font-medium text-slate-300 mb-1">
-                Job Title *
-              </label>
-              <input
-                type="text"
-                required
-                value={jobTitle}
-                onChange={(e) => setJobTitle(e.target.value)}
-                className="w-full bg-slate-700 border border-slate-600 text-white rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 placeholder:text-slate-500"
-              />
+              <label className="block text-sm font-medium text-stone-600 mb-1">Job Title *</label>
+              <input type="text" required value={jobTitle} onChange={(e) => setJobTitle(e.target.value)} className={inputClass} />
             </div>
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
-              <label className="block text-sm font-medium text-slate-300 mb-1">Location</label>
-              <input
-                type="text"
-                value={location}
-                onChange={(e) => setLocation(e.target.value)}
-                placeholder="e.g. San Francisco, CA"
-                className="w-full bg-slate-700 border border-slate-600 text-white rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 placeholder:text-slate-500"
-              />
+              <label className="block text-sm font-medium text-stone-600 mb-1">Location</label>
+              <input type="text" value={location} onChange={(e) => setLocation(e.target.value)} placeholder="e.g. San Francisco, CA" className={inputClass} />
             </div>
             <div className="flex items-end">
               <label className="flex items-center gap-2 cursor-pointer pb-2">
@@ -334,139 +314,80 @@ export default function AddJobModal({
                   type="checkbox"
                   checked={isRemote}
                   onChange={(e) => setIsRemote(e.target.checked)}
-                  className="w-4 h-4 rounded border-slate-600 bg-slate-700 text-indigo-600 focus:ring-indigo-500"
+                  className="w-4 h-4 rounded border-stone-300 text-amber-700 focus:ring-amber-600"
                 />
-                <span className="text-sm text-slate-300">Remote position</span>
+                <span className="text-sm text-stone-600">Remote position</span>
               </label>
             </div>
           </div>
 
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
             <div>
-              <label className="block text-sm font-medium text-slate-300 mb-1">Salary Min</label>
-              <input
-                type="number"
-                value={salaryMin}
-                onChange={(e) => setSalaryMin(e.target.value)}
-                placeholder={salaryType === 'hourly' ? '25' : '80000'}
-                className="w-full bg-slate-700 border border-slate-600 text-white rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 placeholder:text-slate-500"
-              />
+              <label className="block text-sm font-medium text-stone-600 mb-1">Salary Min</label>
+              <input type="number" value={salaryMin} onChange={(e) => setSalaryMin(e.target.value)} placeholder={salaryType === 'hourly' ? '25' : '80000'} className={inputClass} />
             </div>
             <div>
-              <label className="block text-sm font-medium text-slate-300 mb-1">Salary Max</label>
-              <input
-                type="number"
-                value={salaryMax}
-                onChange={(e) => setSalaryMax(e.target.value)}
-                placeholder={salaryType === 'hourly' ? '50' : '120000'}
-                className="w-full bg-slate-700 border border-slate-600 text-white rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 placeholder:text-slate-500"
-              />
+              <label className="block text-sm font-medium text-stone-600 mb-1">Salary Max</label>
+              <input type="number" value={salaryMax} onChange={(e) => setSalaryMax(e.target.value)} placeholder={salaryType === 'hourly' ? '50' : '120000'} className={inputClass} />
             </div>
             <div>
-              <label className="block text-sm font-medium text-slate-300 mb-1">Currency</label>
-              <input
-                type="text"
-                value={salaryCurrency}
-                onChange={(e) => setSalaryCurrency(e.target.value)}
-                className="w-full bg-slate-700 border border-slate-600 text-white rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
-              />
+              <label className="block text-sm font-medium text-stone-600 mb-1">Currency</label>
+              <input type="text" value={salaryCurrency} onChange={(e) => setSalaryCurrency(e.target.value)} className={inputClass} />
             </div>
             <div>
-              <label className="block text-sm font-medium text-slate-300 mb-1">Pay Type</label>
-              <select
-                value={salaryType}
-                onChange={(e) => setSalaryType(e.target.value)}
-                className="w-full appearance-none bg-slate-700 border border-slate-600 text-white rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 cursor-pointer"
-              >
+              <label className="block text-sm font-medium text-stone-600 mb-1">Pay Type</label>
+              <select value={salaryType} onChange={(e) => setSalaryType(e.target.value)} className={`${inputClass} appearance-none cursor-pointer`}>
                 <option value="annual">Annual</option>
                 <option value="hourly">Hourly</option>
               </select>
             </div>
           </div>
 
-          <SkillInput
-            label="Required Skills"
-            skills={requiredSkills}
-            onChange={setRequiredSkills}
-            variant="required"
-          />
-          <SkillInput
-            label="Nice-to-Have Skills"
-            skills={niceToHaveSkills}
-            onChange={setNiceToHaveSkills}
-            variant="nice"
-          />
+          <SkillInput label="Required Skills" skills={requiredSkills} onChange={setRequiredSkills} variant="required" />
+          <SkillInput label="Nice-to-Have Skills" skills={niceToHaveSkills} onChange={setNiceToHaveSkills} variant="nice" />
 
           <div>
-            <label className="block text-sm font-medium text-slate-300 mb-1">Job Summary</label>
-            <textarea
-              value={jobSummary}
-              onChange={(e) => setJobSummary(e.target.value)}
-              rows={3}
-              className="w-full bg-slate-700 border border-slate-600 text-white rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 placeholder:text-slate-500 resize-none"
-            />
+            <label className="block text-sm font-medium text-stone-600 mb-1">Job Summary</label>
+            <textarea value={jobSummary} onChange={(e) => setJobSummary(e.target.value)} rows={3} className={`${inputClass} resize-none`} />
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
             <div>
-              <label className="block text-sm font-medium text-slate-300 mb-1">Status</label>
+              <label className="block text-sm font-medium text-stone-600 mb-1">Status</label>
               <StatusSelect value={status} onChange={setStatus} />
             </div>
             <div>
-              <label className="block text-sm font-medium text-slate-300 mb-1">Date Applied</label>
-              <input
-                type="date"
-                value={dateApplied}
-                onChange={(e) => setDateApplied(e.target.value)}
-                className="w-full bg-slate-700 border border-slate-600 text-white rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 [color-scheme:dark]"
-              />
+              <label className="block text-sm font-medium text-stone-600 mb-1">Date Applied</label>
+              <input type="date" value={dateApplied} onChange={(e) => setDateApplied(e.target.value)} className={inputClass} />
             </div>
             <div>
-              <label className="block text-sm font-medium text-slate-300 mb-1">Follow-up Date</label>
-              <input
-                type="date"
-                value={followUpDate}
-                onChange={(e) => setFollowUpDate(e.target.value)}
-                className="w-full bg-slate-700 border border-slate-600 text-white rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 [color-scheme:dark]"
-              />
+              <label className="block text-sm font-medium text-stone-600 mb-1">Follow-up Date</label>
+              <input type="date" value={followUpDate} onChange={(e) => setFollowUpDate(e.target.value)} className={inputClass} />
             </div>
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-slate-300 mb-1">
-              Application Deadline
-            </label>
-            <input
-              type="date"
-              value={applicationDeadline}
-              onChange={(e) => setApplicationDeadline(e.target.value)}
-              className="w-full bg-slate-700 border border-slate-600 text-white rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 [color-scheme:dark]"
-            />
+            <label className="block text-sm font-medium text-stone-600 mb-1">Application Deadline</label>
+            <input type="date" value={applicationDeadline} onChange={(e) => setApplicationDeadline(e.target.value)} className={inputClass} />
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-slate-300 mb-1">Notes</label>
-            <textarea
-              value={notes}
-              onChange={(e) => setNotes(e.target.value)}
-              rows={3}
-              placeholder="Any notes about this application..."
-              className="w-full bg-slate-700 border border-slate-600 text-white rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 placeholder:text-slate-500 resize-none"
-            />
+            <label className="block text-sm font-medium text-stone-600 mb-1">Notes</label>
+            <textarea value={notes} onChange={(e) => setNotes(e.target.value)} rows={3} placeholder="Any notes about this application..." className={`${inputClass} resize-none`} />
           </div>
 
-          <div className="flex gap-3 justify-end pt-2 border-t border-slate-700">
+          <div className="flex gap-3 justify-end pt-2 border-t border-stone-200/50">
             <button
               type="button"
               onClick={onClose}
-              className="px-4 py-2 text-sm text-slate-300 hover:text-white bg-slate-700 hover:bg-slate-600 rounded-lg transition-colors"
+              className="px-4 py-2 text-sm text-stone-600 hover:text-stone-800 bg-white/50 hover:bg-white/70 rounded-lg transition-colors"
             >
               Cancel
             </button>
             <button
               type="submit"
               disabled={saving || !companyName.trim() || !jobTitle.trim()}
-              className="px-6 py-2 text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-500 disabled:opacity-50 disabled:cursor-not-allowed rounded-lg transition-colors flex items-center gap-2"
+              className="px-6 py-2 text-sm font-medium text-white bg-amber-700 hover:bg-amber-600 disabled:opacity-50 disabled:cursor-not-allowed rounded-lg transition-colors flex items-center gap-2 shadow-sm"
             >
               {saving && <Loader2 className="w-4 h-4 animate-spin" />}
               {editingApp ? 'Update' : 'Save'}

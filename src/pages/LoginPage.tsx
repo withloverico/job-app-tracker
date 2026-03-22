@@ -5,22 +5,22 @@ export default function LoginPage() {
   const { signInWithGoogle } = useAuth()
 
   return (
-    <div className="min-h-dvh flex items-center justify-center bg-slate-900 px-4">
-      <div className="w-full max-w-sm text-center">
+    <div className="min-h-dvh flex items-center justify-center px-4">
+      <div className="w-full max-w-sm text-center frost-strong rounded-2xl p-8 shadow-lg">
         <div className="flex justify-center mb-6">
-          <div className="w-16 h-16 bg-indigo-600/20 rounded-2xl flex items-center justify-center">
-            <Briefcase className="w-8 h-8 text-indigo-400" />
+          <div className="w-16 h-16 bg-amber-700/15 rounded-2xl flex items-center justify-center">
+            <Briefcase className="w-8 h-8 text-amber-700" />
           </div>
         </div>
 
-        <h1 className="text-3xl font-bold text-white mb-2">Job Tracker</h1>
-        <p className="text-slate-400 mb-8">
+        <h1 className="text-3xl font-bold text-stone-800 mb-2">Job Tracker</h1>
+        <p className="text-stone-500 mb-8">
           Track your job applications, auto-fill from postings, and stay organized.
         </p>
 
         <button
           onClick={signInWithGoogle}
-          className="w-full flex items-center justify-center gap-3 bg-white hover:bg-gray-50 text-gray-900 font-medium py-3 px-4 rounded-xl transition-colors shadow-lg"
+          className="w-full flex items-center justify-center gap-3 bg-white/80 hover:bg-white text-stone-800 font-medium py-3 px-4 rounded-xl transition-colors shadow-sm border border-stone-200/50"
         >
           <svg className="w-5 h-5" viewBox="0 0 24 24">
             <path
@@ -43,7 +43,7 @@ export default function LoginPage() {
           Sign in with Google
         </button>
 
-        <p className="mt-6 text-xs text-slate-500">
+        <p className="mt-6 text-xs text-stone-400">
           Your data is private and only accessible to you.
         </p>
       </div>
