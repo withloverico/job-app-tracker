@@ -9,6 +9,7 @@ import {
   Calendar,
   ExternalLink,
   ArrowUpDown,
+  Trash2,
 } from 'lucide-react'
 import type { Application } from '../types'
 import { STATUSES, STATUS_DOT_COLORS } from '../types'
@@ -16,6 +17,7 @@ import { useApplications } from '../hooks/useApplications'
 import Header from '../components/Header'
 import StatusBadge from '../components/StatusBadge'
 import AddJobModal from '../components/AddJobModal'
+import ConfirmDialog from '../components/ConfirmDialog'
 
 type SortField = 'created_at' | 'application_deadline' | 'company_name'
 type ViewMode = 'card' | 'table'
@@ -35,9 +37,10 @@ function formatSalary(app: Application): string | null {
 }
 
 export default function Dashboard() {
-  const { applications, loading, add, update, reload } = useApplications()
+  const { applications, loading, add, update, remove, reload } = useApplications()
   const [modalOpen, setModalOpen] = useState(false)
   const [editingApp, setEditingApp] = useState<Application | null>(null)
+  const [deletingApp, setDeletingApp] = useState<Application | null>(null)
   const [search, setSearch] = useState('')
   const [statusFilter, setStatusFilter] = useState<string>('all')
   const [sortField, setSortField] = useState<SortField>('created_at')
@@ -286,13 +289,24 @@ export default function Dashboard() {
                   <span className="text-xs text-slate-500">
                     {new Date(app.created_at).toLocaleDateString()}
                   </span>
-                  <Link
-                    to={`/job/${app.id}`}
-                    onClick={(e) => e.stopPropagation()}
-                    className="text-xs text-indigo-400 hover:text-indigo-300 flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity"
-                  >
-                    Details <ExternalLink className="w-3 h-3" />
-                  </Link>
+                  <div className="flex items-center gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
+                    <button
+                      onClick={(e) => {
+                        e.stopPropagation()
+                        setDeletingApp(app)
+                      }}
+                      className="text-xs text-red-400 hover:text-red-300 transition-colors"
+                    >
+                      <Trash2 className="w-3.5 h-3.5" />
+                    </button>
+                    <Link
+                      to={`/job/${app.id}`}
+                      onClick={(e) => e.stopPropagation()}
+                      className="text-xs text-indigo-400 hover:text-indigo-300 flex items-center gap-1"
+                    >
+                      Details <ExternalLink className="w-3 h-3" />
+                    </Link>
+                  </div>
                 </div>
               </div>
             ))}
@@ -312,6 +326,7 @@ export default function Dashboard() {
                   <th className="px-4 py-3 font-medium hidden md:table-cell">Salary</th>
                   <th className="px-4 py-3 font-medium hidden lg:table-cell">Deadline</th>
                   <th className="px-4 py-3 font-medium hidden md:table-cell">Added</th>
+                  <th className="px-4 py-3 font-medium w-10"></th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-slate-700/50">
@@ -349,6 +364,17 @@ export default function Dashboard() {
                     <td className="px-4 py-3 text-slate-500 hidden md:table-cell">
                       {new Date(app.created_at).toLocaleDateString()}
                     </td>
+                    <td className="px-4 py-3">
+                      <button
+                        onClick={(e) => {
+                          e.stopPropagation()
+                          setDeletingApp(app)
+                        }}
+                        className="text-slate-500 hover:text-red-400 transition-colors"
+                      >
+                        <Trash2 className="w-4 h-4" />
+                      </button>
+                    </td>
                   </tr>
                 ))}
               </tbody>
@@ -367,6 +393,19 @@ export default function Dashboard() {
         onSave={handleSave}
         editingApp={editingApp}
         applications={applications}
+      />
+
+      <ConfirmDialog
+        open={!!deletingApp}
+        title="Delete Application"
+        message={deletingApp ? `Are you sure you want to delete your application for ${deletingApp.job_title} at ${deletingApp.company_name}?` : ''}
+        onConfirm={async () => {
+          if (deletingApp) {
+            await remove(deletingApp.id)
+            setDeletingApp(null)
+          }
+        }}
+        onCancel={() => setDeletingApp(null)}
       />
     </div>
   )
