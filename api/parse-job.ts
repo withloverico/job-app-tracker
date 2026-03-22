@@ -1,64 +1,60 @@
-import type { VercelRequest, VercelResponse } from '@vercel/node'
-import { verifyAuth } from './_lib/auth'
+import { verifyAuth } from './_lib/auth.js'
 
-export default async function handler(req: VercelRequest, res: VercelResponse) {
+export default async function handler(req: any, res: any) {
   try {
-  if (req.method !== 'POST') {
-    return res.status(405).json({ error: 'Method not allowed' })
-  }
+    if (req.method !== 'POST') {
+      return res.status(405).json({ error: 'Method not allowed' })
+    }
 
-  const { error: authError } = await verifyAuth(req)
-  if (authError) {
-    return res.status(401).json({ error: authError })
-  }
+    const { error: authError } = await verifyAuth(req)
+    if (authError) {
+      return res.status(401).json({ error: authError })
+    }
 
-  const { url, text } = req.body as { url?: string; text?: string }
+    const { url, text } = req.body || {}
+    let content: string
 
-  let content: string
+    if (url) {
+      try {
+        const response = await fetch(url, {
+          headers: {
+            'User-Agent':
+              'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
+            Accept: 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
+          },
+          signal: AbortSignal.timeout(10000),
+        })
 
-  if (url) {
-    try {
-      const response = await fetch(url, {
-        headers: {
-          'User-Agent':
-            'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
-          Accept: 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
-        },
-        signal: AbortSignal.timeout(10000),
-      })
+        if (!response.ok) {
+          return res.status(200).json({
+            error: 'Failed to fetch the job posting page.',
+            fallback: true,
+          })
+        }
 
-      if (!response.ok) {
+        const html = await response.text()
+        content = html
+          .replace(/<script[\s\S]*?<\/script>/gi, '')
+          .replace(/<style[\s\S]*?<\/style>/gi, '')
+          .replace(/<[^>]+>/g, ' ')
+          .replace(/\s+/g, ' ')
+          .trim()
+          .slice(0, 30000)
+      } catch {
         return res.status(200).json({
-          error: 'Failed to fetch the job posting page.',
+          error: 'Could not fetch the job posting. The site may be blocking automated requests.',
           fallback: true,
         })
       }
-
-      const html = await response.text()
-      // Strip HTML to readable text - remove scripts, styles, and tags
-      content = html
-        .replace(/<script[\s\S]*?<\/script>/gi, '')
-        .replace(/<style[\s\S]*?<\/style>/gi, '')
-        .replace(/<[^>]+>/g, ' ')
-        .replace(/\s+/g, ' ')
-        .trim()
-        .slice(0, 30000) // Limit content size for Claude
-    } catch {
-      return res.status(200).json({
-        error: 'Could not fetch the job posting. The site may be blocking automated requests.',
-        fallback: true,
-      })
+    } else if (text) {
+      content = text.slice(0, 30000)
+    } else {
+      return res.status(400).json({ error: 'Provide either a url or text field' })
     }
-  } else if (text) {
-    content = text.slice(0, 30000)
-  } else {
-    return res.status(400).json({ error: 'Provide either a url or text field' })
-  }
 
-  try {
     const apiKey = process.env.ANTHROPIC_API_KEY
     if (!apiKey) {
-      return res.status(500).json({ error: 'API key not configured' })
+      return res.status(500).json({ error: 'ANTHROPIC_API_KEY not configured' })
     }
 
     const response = await fetch('https://api.anthropic.com/v1/messages', {
@@ -109,8 +105,6 @@ ${content}`,
     const responseText =
       result.content?.[0]?.type === 'text' ? result.content[0].text : ''
 
-    // Parse the JSON from Claude's response
-    // Try to extract JSON even if Claude wrapped it
     let parsed
     try {
       parsed = JSON.parse(responseText)
@@ -127,15 +121,8 @@ ${content}`,
     }
 
     return res.status(200).json({ data: parsed })
-  } catch (err) {
-    console.error('Parse error:', err)
-    return res.status(200).json({
-      error: 'An error occurred while analyzing the job posting.',
-      fallback: true,
-    })
-  }
-  } catch (topErr) {
-    console.error('Function crash:', topErr)
-    return res.status(500).json({ error: String(topErr) })
+  } catch (err: any) {
+    console.error('Function error:', err)
+    return res.status(500).json({ error: err.message || 'Internal server error' })
   }
 }
