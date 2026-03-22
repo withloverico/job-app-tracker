@@ -35,6 +35,7 @@ export default function AddJobModal({
   const [salaryMin, setSalaryMin] = useState('')
   const [salaryMax, setSalaryMax] = useState('')
   const [salaryCurrency, setSalaryCurrency] = useState('USD')
+  const [salaryType, setSalaryType] = useState('annual')
   const [requiredSkills, setRequiredSkills] = useState<string[]>([])
   const [niceToHaveSkills, setNiceToHaveSkills] = useState<string[]>([])
   const [applicationDeadline, setApplicationDeadline] = useState('')
@@ -54,6 +55,7 @@ export default function AddJobModal({
       setSalaryMin(editingApp.salary_min?.toString() || '')
       setSalaryMax(editingApp.salary_max?.toString() || '')
       setSalaryCurrency(editingApp.salary_currency || 'USD')
+      setSalaryType(editingApp.salary_type || 'annual')
       setRequiredSkills(editingApp.required_skills || [])
       setNiceToHaveSkills(editingApp.nice_to_have_skills || [])
       setApplicationDeadline(editingApp.application_deadline || '')
@@ -77,6 +79,7 @@ export default function AddJobModal({
     setSalaryMin('')
     setSalaryMax('')
     setSalaryCurrency('USD')
+    setSalaryType('annual')
     setRequiredSkills([])
     setNiceToHaveSkills([])
     setApplicationDeadline('')
@@ -99,6 +102,7 @@ export default function AddJobModal({
     if (data.salary_min !== null) setSalaryMin(data.salary_min.toString())
     if (data.salary_max !== null) setSalaryMax(data.salary_max.toString())
     if (data.salary_currency) setSalaryCurrency(data.salary_currency)
+    if (data.salary_type) setSalaryType(data.salary_type)
     if (data.required_skills) setRequiredSkills(data.required_skills)
     if (data.nice_to_have_skills) setNiceToHaveSkills(data.nice_to_have_skills)
     if (data.application_deadline) setApplicationDeadline(data.application_deadline)
@@ -159,6 +163,7 @@ export default function AddJobModal({
       salary_min: salaryMin ? parseInt(salaryMin) : null,
       salary_max: salaryMax ? parseInt(salaryMax) : null,
       salary_currency: salaryMin || salaryMax ? salaryCurrency : null,
+      salary_type: salaryMin || salaryMax ? salaryType : null,
       required_skills: requiredSkills,
       nice_to_have_skills: niceToHaveSkills,
       application_deadline: applicationDeadline || null,
@@ -336,14 +341,14 @@ export default function AddJobModal({
             </div>
           </div>
 
-          <div className="grid grid-cols-3 gap-4">
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
             <div>
               <label className="block text-sm font-medium text-slate-300 mb-1">Salary Min</label>
               <input
                 type="number"
                 value={salaryMin}
                 onChange={(e) => setSalaryMin(e.target.value)}
-                placeholder="80000"
+                placeholder={salaryType === 'hourly' ? '25' : '80000'}
                 className="w-full bg-slate-700 border border-slate-600 text-white rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 placeholder:text-slate-500"
               />
             </div>
@@ -353,7 +358,7 @@ export default function AddJobModal({
                 type="number"
                 value={salaryMax}
                 onChange={(e) => setSalaryMax(e.target.value)}
-                placeholder="120000"
+                placeholder={salaryType === 'hourly' ? '50' : '120000'}
                 className="w-full bg-slate-700 border border-slate-600 text-white rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 placeholder:text-slate-500"
               />
             </div>
@@ -365,6 +370,17 @@ export default function AddJobModal({
                 onChange={(e) => setSalaryCurrency(e.target.value)}
                 className="w-full bg-slate-700 border border-slate-600 text-white rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
               />
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-slate-300 mb-1">Pay Type</label>
+              <select
+                value={salaryType}
+                onChange={(e) => setSalaryType(e.target.value)}
+                className="w-full appearance-none bg-slate-700 border border-slate-600 text-white rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 cursor-pointer"
+              >
+                <option value="annual">Annual</option>
+                <option value="hourly">Hourly</option>
+              </select>
             </div>
           </div>
 

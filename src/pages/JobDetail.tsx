@@ -20,10 +20,12 @@ import toast from 'react-hot-toast'
 function formatSalaryRange(app: Application): string | null {
   if (!app.salary_min && !app.salary_max) return null
   const c = app.salary_currency || 'USD'
+  const isHourly = app.salary_type === 'hourly'
+  const suffix = isHourly ? '/hr' : '/yr'
   const fmt = (n: number) => n.toLocaleString()
-  if (app.salary_min && app.salary_max) return `${c} ${fmt(app.salary_min)} – ${fmt(app.salary_max)}`
-  if (app.salary_min) return `${c} ${fmt(app.salary_min)}+`
-  return `Up to ${c} ${fmt(app.salary_max!)}`
+  if (app.salary_min && app.salary_max) return `${c} ${fmt(app.salary_min)} – ${fmt(app.salary_max)}${suffix}`
+  if (app.salary_min) return `${c} ${fmt(app.salary_min)}+${suffix}`
+  return `Up to ${c} ${fmt(app.salary_max!)}${suffix}`
 }
 
 export default function JobDetail() {

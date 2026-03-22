@@ -23,13 +23,15 @@ type ViewMode = 'card' | 'table'
 function formatSalary(app: Application): string | null {
   if (!app.salary_min && !app.salary_max) return null
   const currency = app.salary_currency || 'USD'
+  const isHourly = app.salary_type === 'hourly'
+  const suffix = isHourly ? '/hr' : '/yr'
   const fmt = (n: number) => {
-    if (n >= 1000) return `${Math.round(n / 1000)}k`
+    if (!isHourly && n >= 1000) return `${Math.round(n / 1000)}k`
     return n.toString()
   }
-  if (app.salary_min && app.salary_max) return `${currency} ${fmt(app.salary_min)}–${fmt(app.salary_max)}`
-  if (app.salary_min) return `${currency} ${fmt(app.salary_min)}+`
-  return `Up to ${currency} ${fmt(app.salary_max!)}`
+  if (app.salary_min && app.salary_max) return `${currency} ${fmt(app.salary_min)}–${fmt(app.salary_max)}${suffix}`
+  if (app.salary_min) return `${currency} ${fmt(app.salary_min)}+${suffix}`
+  return `Up to ${currency} ${fmt(app.salary_max!)}${suffix}`
 }
 
 export default function Dashboard() {

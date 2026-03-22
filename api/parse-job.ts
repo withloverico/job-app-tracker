@@ -79,6 +79,7 @@ export default async function handler(req: any, res: any) {
 - salary_min (number or null)
 - salary_max (number or null)
 - salary_currency (string or null, e.g. "USD", "EUR")
+- salary_type (string: "hourly" or "annual")
 - required_skills (array of strings)
 - nice_to_have_skills (array of strings)
 - application_deadline (ISO date string or null)

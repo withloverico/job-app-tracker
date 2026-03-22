@@ -20,6 +20,7 @@ export interface Application {
   salary_min: number | null
   salary_max: number | null
   salary_currency: string | null
+  salary_type: string | null
   required_skills: string[]
   nice_to_have_skills: string[]
   application_deadline: string | null
@@ -38,6 +39,7 @@ export interface ParsedJob {
   salary_min: number | null
   salary_max: number | null
   salary_currency: string | null
+  salary_type: string | null
   required_skills: string[] | null
   nice_to_have_skills: string[] | null
   application_deadline: string | null
