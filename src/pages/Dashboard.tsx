@@ -37,7 +37,7 @@ function formatSalary(app: Application): string | null {
 }
 
 export default function Dashboard() {
-  const { applications, loading, add, update, remove, reload } = useApplications()
+  const { applications, loading, add, update, remove } = useApplications()
   const [modalOpen, setModalOpen] = useState(false)
   const [editingApp, setEditingApp] = useState<Application | null>(null)
   const [deletingApp, setDeletingApp] = useState<Application | null>(null)
