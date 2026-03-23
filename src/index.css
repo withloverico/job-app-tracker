@@ -14,26 +14,22 @@ body {
 }
 
 /* 
- * Liquid Glass Base Classes
+ * Frost / Glassmorphism
  * Balancing readability with true glass aesthetic
  */
 .frost, .frost-strong, .frost-light {
-  /* Lowered base opacity so the glass feels transparent again */
-  background: rgba(255, 255, 255, 0.25);
+  /* Bringing the white paint back for better contrast */
+  background: rgba(255, 255, 255, 0.45);
   
-  /* The Magic: 
-     - High blur melts the background lines.
-     - saturate(120%) brings out the autumn colors.
-     - brightness(1.4) acts as a glowing backlight, ensuring dark text is readable 
-       WITHOUT needing a thick solid white background color. */
-  backdrop-filter: blur(24px) saturate(120%) brightness(1.4);
-  -webkit-backdrop-filter: blur(24px) saturate(120%) brightness(1.4);
+  /* High blur and slight brightness bump */
+  backdrop-filter: blur(24px) saturate(130%) brightness(1.2);
+  -webkit-backdrop-filter: blur(24px) saturate(130%) brightness(1.2);
   
-  border: 1px solid rgba(255, 255, 255, 0.4);
+  border: 1px solid rgba(255, 255, 255, 0.6);
   
-  /* Crisp liquid edges without the milky wash */
+  /* Soft inset glow and drop shadow */
   box-shadow:
-    inset 0 1px 1px rgba(255, 255, 255, 0.8),
+    inset 0 1px 1px rgba(255, 255, 255, 0.9),
     0 4px 12px rgba(0, 0, 0, 0.1);
   position: relative;
 }
@@ -50,8 +46,8 @@ body {
   position: absolute;
   inset: 0;
   border-radius: inherit;
-  background: linear-gradient(135deg, rgba(255, 255, 255, 0.4) 0%, transparent 40%, transparent 100%);
-  opacity: 0.7;
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.6) 0%, transparent 50%, transparent 100%);
+  opacity: 0.8;
   pointer-events: none;
   z-index: 1;
 }
@@ -62,49 +58,47 @@ body {
   position: absolute;
   inset: 0;
   border-radius: inherit;
-  background: linear-gradient(315deg, rgba(255, 255, 255, 0.2) 0%, transparent 40%, transparent 100%);
-  opacity: 0.5;
+  background: linear-gradient(315deg, rgba(255, 255, 255, 0.3) 0%, transparent 50%, transparent 100%);
+  opacity: 0.6;
   pointer-events: none;
   z-index: 1;
 }
 
 /* Stronger variant for modals or highlighted elements */
 .frost-strong {
-  background: rgba(255, 255, 255, 0.35);
-  backdrop-filter: blur(32px) saturate(130%) brightness(1.5);
-  -webkit-backdrop-filter: blur(32px) saturate(130%) brightness(1.5);
+  background: rgba(255, 255, 255, 0.6);
+  backdrop-filter: blur(32px) saturate(140%) brightness(1.3);
+  -webkit-backdrop-filter: blur(32px) saturate(140%) brightness(1.3);
   box-shadow:
-    inset 0 1px 1px rgba(255, 255, 255, 0.9),
+    inset 0 1px 1px rgba(255, 255, 255, 1),
     0 8px 24px rgba(0, 0, 0, 0.15);
 }
 
 /* Lighter variant for subtle elements */
 .frost-light {
-  background: rgba(255, 255, 255, 0.15);
-  backdrop-filter: blur(16px) saturate(110%) brightness(1.2);
-  -webkit-backdrop-filter: blur(16px) saturate(110%) brightness(1.2);
+  background: rgba(255, 255, 255, 0.3);
+  backdrop-filter: blur(16px) saturate(120%) brightness(1.1);
+  -webkit-backdrop-filter: blur(16px) saturate(120%) brightness(1.1);
   box-shadow:
-    inset 0 1px 1px rgba(255, 255, 255, 0.6),
+    inset 0 1px 1px rgba(255, 255, 255, 0.7),
     0 2px 8px rgba(0, 0, 0, 0.05);
 }
 
 /* Refractive glass for input fields */
 .frost-input {
-  /* Inputs look better slightly darker/more transparent to feel "inset" */
-  background: rgba(255, 255, 255, 0.3);
-  backdrop-filter: blur(16px) saturate(120%) brightness(1.3);
-  -webkit-backdrop-filter: blur(16px) saturate(120%) brightness(1.3);
-  border: 1px solid rgba(255, 255, 255, 0.4);
-  /* Inner shadow simulates depth */
+  background: rgba(255, 255, 255, 0.4);
+  backdrop-filter: blur(16px) saturate(120%) brightness(1.2);
+  -webkit-backdrop-filter: blur(16px) saturate(120%) brightness(1.2);
+  border: 1px solid rgba(255, 255, 255, 0.5);
   box-shadow: 
     inset 0 2px 4px rgba(0, 0, 0, 0.05),
-    0 1px 0px rgba(255, 255, 255, 0.5);
+    0 1px 0px rgba(255, 255, 255, 0.6);
   position: relative;
   transition: all 0.2s ease;
 }
 
 .frost-input:focus {
-  background: rgba(255, 255, 255, 0.45);
+  background: rgba(255, 255, 255, 0.6);
   border-color: rgba(194, 117, 58, 0.6); /* Amber highlight */
   box-shadow:
     inset 0 2px 4px rgba(0, 0, 0, 0.05),
