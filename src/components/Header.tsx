@@ -51,17 +51,16 @@ export default function Header() {
           </button>
 
           {menuOpen && (
-            <div className="absolute right-0 mt-2 w-56 frost-strong rounded-xl shadow-lg py-1">
-              <div className="px-4 py-2 border-b border-stone-200/50">
-                <p className="text-sm font-medium text-stone-800 truncate">{displayName}</p>
-                <p className="text-xs text-stone-500 truncate">{user?.email}</p>
-              </div>
+            <div
+              className="frost-strong rounded-xl shadow-lg py-1 z-50"
+              style={{ position: 'absolute', right: 0, top: '100%', marginTop: 4 }}
+            >
               <button
                 onClick={() => {
                   setMenuOpen(false)
                   signOut()
                 }}
-                className="w-full px-4 py-2 text-sm text-stone-600 hover:bg-white/30 hover:text-stone-800 flex items-center gap-2 transition-colors"
+                className="w-full px-4 py-2.5 text-sm text-stone-600 hover:bg-white/30 hover:text-stone-800 flex items-center gap-2 transition-colors whitespace-nowrap"
               >
                 <LogOut className="w-4 h-4" />
                 Sign out

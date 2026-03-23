@@ -1,4 +1,5 @@
-import { useState, useEffect, useMemo, useCallback } from 'react'
+import { useState, useEffect, useMemo, useCallback, useRef } from 'react'
+import { createPortal } from 'react-dom'
 import { Link } from 'react-router-dom'
 import {
   Plus,
@@ -77,6 +78,32 @@ export default function Dashboard() {
       setClosingCard(false)
     }, 350)
   }, [])
+  const [sortOpen, setSortOpen] = useState(false)
+  const sortButtonRef = useRef<HTMLButtonElement>(null)
+  const sortMenuRef = useRef<HTMLDivElement>(null)
+  const [sortMenuPos, setSortMenuPos] = useState({ top: 0, left: 0 })
+
+  useEffect(() => {
+    if (!sortOpen) return
+    if (sortButtonRef.current) {
+      const rect = sortButtonRef.current.getBoundingClientRect()
+      setSortMenuPos({ top: rect.bottom + 4, left: rect.left })
+    }
+    const timer = setTimeout(() => {
+      function handleClick(e: MouseEvent) {
+        if (
+          sortButtonRef.current && !sortButtonRef.current.contains(e.target as Node) &&
+          sortMenuRef.current && !sortMenuRef.current.contains(e.target as Node)
+        ) {
+          setSortOpen(false)
+        }
+      }
+      document.addEventListener('mousedown', handleClick)
+      return () => document.removeEventListener('mousedown', handleClick)
+    }, 0)
+    return () => clearTimeout(timer)
+  }, [sortOpen])
+
   const [search, setSearch] = useState('')
   const [statusFilter, setStatusFilter] = useState<string>('all')
   const [sortField, setSortField] = useState<SortField>('created_at')
@@ -197,19 +224,46 @@ export default function Dashboard() {
           </div>
 
           <div className="relative flex-shrink-0">
-            <ArrowUpDown className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-stone-400 pointer-events-none z-10" />
-            <select
-              value={sortField}
-              onChange={(e) => setSortField(e.target.value as SortField)}
-              className="appearance-none frost-input text-stone-800 rounded-lg pl-9 pr-8 py-2 text-sm cursor-pointer"
+            <button
+              ref={sortButtonRef}
+              onClick={() => setSortOpen(!sortOpen)}
+              className="flex items-center gap-2 frost-input text-stone-800 rounded-lg pl-3 pr-3 py-2 text-sm cursor-pointer"
             >
-              <option value="created_at">Date Added</option>
-              <option value="application_deadline">Deadline</option>
-              <option value="company_name">Company</option>
-            </select>
+              <ArrowUpDown className="w-4 h-4 text-stone-400" />
+              {{ created_at: 'Date Added', application_deadline: 'Deadline', company_name: 'Company' }[sortField]}
+            </button>
+            {sortOpen && createPortal(
+              <div
+                ref={sortMenuRef}
+                className="w-44 sm:w-52 frost-strong rounded-xl shadow-lg py-1.5 z-[100]"
+                style={{ position: 'fixed', top: sortMenuPos.top, left: sortMenuPos.left }}
+              >
+                {([
+                  { value: 'created_at', label: 'Date Added' },
+                  { value: 'application_deadline', label: 'Deadline' },
+                  { value: 'company_name', label: 'Company' },
+                ] as const).map((opt) => (
+                  <button
+                    key={opt.value}
+                    onClick={() => {
+                      setSortField(opt.value)
+                      setSortOpen(false)
+                    }}
+                    className={`w-full px-3 py-2 text-xs sm:text-sm text-left flex items-center gap-2 transition-colors ${
+                      sortField === opt.value
+                        ? 'bg-white/40 font-semibold text-stone-800'
+                        : 'text-stone-600 hover:bg-white/30 hover:text-stone-800'
+                    }`}
+                  >
+                    {opt.label}
+                  </button>
+                ))}
+              </div>,
+              document.body
+            )}
           </div>
 
-          <div className="flex frost rounded-lg flex-shrink-0">
+          <div className="flex frost-strong rounded-lg flex-shrink-0">
             <button
               onClick={() => setViewMode('card')}
               className={`p-2 transition-colors ${viewMode === 'card' ? 'bg-white/50 text-stone-800' : 'text-stone-500 hover:text-stone-800'}`}
@@ -258,7 +312,7 @@ export default function Dashboard() {
         {/* Empty state */}
         {!loading && applications.length === 0 && (
           <div className="text-center py-20">
-            <div className="frost rounded-2xl p-8 max-w-md mx-auto shadow-sm">
+            <div className="frost-strong rounded-2xl p-8 max-w-md mx-auto shadow-sm">
               <div className="frost-strong w-16 h-16 rounded-2xl flex items-center justify-center mx-auto mb-4">
                 <Plus className="w-8 h-8 text-stone-400" />
               </div>
@@ -285,7 +339,7 @@ export default function Dashboard() {
         {/* No results */}
         {!loading && applications.length > 0 && filtered.length === 0 && (
           <div className="text-center py-12">
-            <div className="frost rounded-2xl p-6 max-w-sm mx-auto shadow-sm">
+            <div className="frost-strong rounded-2xl p-6 max-w-sm mx-auto shadow-sm">
               <p className="text-stone-500">No applications match your filters.</p>
             </div>
           </div>
@@ -515,7 +569,7 @@ export default function Dashboard() {
 
         {/* Table View */}
         {!loading && filtered.length > 0 && viewMode === 'table' && (
-          <div className="overflow-x-auto frost rounded-xl shadow-sm">
+          <div className="overflow-x-auto frost-strong rounded-xl shadow-sm">
             <table className="w-full text-sm">
               <thead>
                 <tr className="text-stone-600 text-left border-b border-stone-200/50">
@@ -533,7 +587,7 @@ export default function Dashboard() {
                 {filtered.map((app) => (
                   <tr
                     key={app.id}
-                    onClick={() => openEdit(app)}
+                    onClick={() => setFlippedCard(app.id)}
                     className="hover:bg-white/30 cursor-pointer transition-colors"
                   >
                     <td className="px-4 py-3 text-stone-800 font-medium">{app.company_name}</td>
