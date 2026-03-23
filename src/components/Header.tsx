@@ -1,6 +1,6 @@
 import { useState, useRef, useEffect } from 'react'
 import { useAuth } from '../hooks/useAuth'
-import { LogOut, Briefcase } from 'lucide-react'
+import { LogOut } from 'lucide-react'
 
 export default function Header() {
   const { user, signOut } = useAuth()
@@ -24,7 +24,7 @@ export default function Header() {
     <header className="fixed top-0 left-0 right-0 z-40 frost-strong" style={{ borderRadius: 0 }}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 h-14 flex items-center justify-between">
         <a href="/" className="flex items-center gap-2 text-stone-800 font-semibold text-lg">
-          <Briefcase className="w-5 h-5 text-amber-700" />
+          <img src="/logo.png" alt="Job Tracker" className="w-8 h-8 rounded-lg object-cover" />
           <span>Job Tracker</span>
         </a>
 
