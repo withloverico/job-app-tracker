@@ -158,7 +158,7 @@ export default function JobDetail() {
         </div>
 
         {/* Header card */}
-        <div className="frost rounded-2xl p-6 mb-4 shadow-sm">
+        <div className="frost-strong rounded-2xl p-6 mb-4 shadow-sm">
           <div className="flex flex-col sm:flex-row sm:items-start gap-4 mb-4">
             <div className="flex-1 min-w-0">
               {editingField === 'job_title' ? (
@@ -258,7 +258,7 @@ export default function JobDetail() {
 
         {/* Summary */}
         {app.job_summary && (
-          <div className="frost rounded-2xl p-6 mb-4 shadow-sm">
+          <div className="frost-strong rounded-2xl p-6 mb-4 shadow-sm">
             <h2 className="text-sm font-medium text-stone-600 mb-2">Summary</h2>
             <p className="text-stone-600 text-sm leading-relaxed">{app.job_summary}</p>
           </div>
@@ -266,7 +266,7 @@ export default function JobDetail() {
 
         {/* Skills */}
         {(app.required_skills.length > 0 || app.nice_to_have_skills.length > 0) && (
-          <div className="frost rounded-2xl p-6 mb-4 shadow-sm">
+          <div className="frost-strong rounded-2xl p-6 mb-4 shadow-sm">
             {app.required_skills.length > 0 && (
               <div className="mb-4">
                 <h2 className="text-sm font-medium text-stone-600 mb-2">Required Skills</h2>
@@ -291,7 +291,7 @@ export default function JobDetail() {
         )}
 
         {/* Dates */}
-        <div className="frost rounded-2xl p-6 mb-4 shadow-sm">
+        <div className="frost-strong rounded-2xl p-6 mb-4 shadow-sm">
           <h2 className="text-sm font-medium text-stone-600 mb-3">Dates</h2>
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 text-sm">
             <div>
@@ -314,7 +314,7 @@ export default function JobDetail() {
         </div>
 
         {/* Notes */}
-        <div className="frost rounded-2xl p-6 mb-6 shadow-sm">
+        <div className="frost-strong rounded-2xl p-6 mb-6 shadow-sm">
           <h2 className="text-sm font-medium text-stone-600 mb-2">Notes</h2>
           <textarea
             value={notes}
