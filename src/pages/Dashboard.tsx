@@ -192,7 +192,7 @@ export default function Dashboard() {
       <main className="flex-1 overflow-y-auto overflow-x-hidden pt-14 pb-16">
         <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 py-6">
         {/* Status summary bar */}
-        <div className="flex gap-2 overflow-x-auto pb-2 mb-6 scrollbar-hide">
+        <div className="flex gap-2 overflow-x-auto pb-2 mb-6 scrollbar-hide dash-enter">
           {STATUSES.map((s) => (
             <button
               key={s}
@@ -211,7 +211,7 @@ export default function Dashboard() {
         </div>
 
         {/* Controls */}
-        <div className="flex gap-3 mb-6 overflow-x-auto scrollbar-hide pb-1">
+        <div className="flex gap-3 mb-6 overflow-x-auto scrollbar-hide pb-1 dash-enter" style={{ animationDelay: '0.1s' }}>
           <div className="relative flex-1 min-w-[180px]">
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-stone-400 z-10" />
             <input
@@ -296,7 +296,8 @@ export default function Dashboard() {
             setEditingApp(null)
             setModalOpen(true)
           }}
-          className="sm:hidden flex items-center justify-center gap-2 w-full mb-6 px-4 py-2.5 bg-amber-700 hover:bg-amber-600 text-white text-sm font-medium rounded-lg transition-colors shadow-sm"
+          className="sm:hidden flex items-center justify-center gap-2 w-full mb-6 px-4 py-2.5 bg-amber-700 hover:bg-amber-600 text-white text-sm font-medium rounded-lg transition-colors shadow-sm dash-enter"
+          style={{ animationDelay: '0.15s' }}
         >
           <Plus className="w-4 h-4" />
           Add Job
@@ -347,7 +348,7 @@ export default function Dashboard() {
 
         {/* Card View */}
         {!loading && filtered.length > 0 && viewMode === 'card' && (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 dash-enter" style={{ animationDelay: '0.2s' }}>
             {filtered.map((app) => (
               <div
                 key={app.id}
@@ -569,7 +570,7 @@ export default function Dashboard() {
 
         {/* Table View */}
         {!loading && filtered.length > 0 && viewMode === 'table' && (
-          <div className="overflow-x-auto frost-strong rounded-xl shadow-sm">
+          <div className="overflow-x-auto frost-strong rounded-xl shadow-sm dash-enter" style={{ animationDelay: '0.2s' }}>
             <table className="w-full text-sm">
               <thead>
                 <tr className="text-stone-600 text-left border-b border-stone-200/50">
