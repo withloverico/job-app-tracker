@@ -22,9 +22,9 @@ body {
   /* High white opacity for clear text reading against busy backgrounds */
   background: rgba(255, 255, 255, 0.70);
 
-  /* High blur and slight brightness bump */
-  backdrop-filter: blur(24px) saturate(130%) brightness(1.1);
-  -webkit-backdrop-filter: blur(24px) saturate(130%) brightness(1.1);
+  /* Reduced blur on mobile for GPU performance, full blur on desktop */
+  backdrop-filter: blur(12px) saturate(120%) brightness(1.05);
+  -webkit-backdrop-filter: blur(12px) saturate(120%) brightness(1.05);
 
   border: 1px solid rgba(255, 255, 255, 0.8);
 
@@ -35,54 +35,77 @@ body {
   position: relative;
 }
 
+@media (min-width: 640px) {
+  .frost, .frost-strong, .frost-light {
+    backdrop-filter: blur(24px) saturate(130%) brightness(1.1);
+    -webkit-backdrop-filter: blur(24px) saturate(130%) brightness(1.1);
+  }
+}
+
 /* Ensure content stays above the pseudo-element gradients */
 .frost > *, .frost-strong > *, .frost-light > * {
   position: relative;
   z-index: 10;
 }
 
-/* Top-left to bottom-right strong light reflection */
-.frost::before, .frost-strong::before, .frost-light::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  border-radius: inherit;
-  background: linear-gradient(135deg, rgba(255, 255, 255, 0.6) 0%, transparent 50%, transparent 100%);
-  opacity: 0.8;
-  pointer-events: none;
-  z-index: 1;
-}
+/* Top-left to bottom-right strong light reflection — desktop only */
+@media (min-width: 640px) {
+  .frost::before, .frost-strong::before, .frost-light::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.6) 0%, transparent 50%, transparent 100%);
+    opacity: 0.8;
+    pointer-events: none;
+    z-index: 1;
+  }
 
-/* Bottom-right to top-left subtle reflection */
-.frost::after, .frost-strong::after, .frost-light::after {
-  content: '';
-  position: absolute;
-  inset: 0;
-  border-radius: inherit;
-  background: linear-gradient(315deg, rgba(255, 255, 255, 0.3) 0%, transparent 50%, transparent 100%);
-  opacity: 0.6;
-  pointer-events: none;
-  z-index: 1;
+  /* Bottom-right to top-left subtle reflection */
+  .frost::after, .frost-strong::after, .frost-light::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    background: linear-gradient(315deg, rgba(255, 255, 255, 0.3) 0%, transparent 50%, transparent 100%);
+    opacity: 0.6;
+    pointer-events: none;
+    z-index: 1;
+  }
 }
 
 /* Stronger variant for modals or highlighted elements */
 .frost-strong {
   background: rgba(255, 255, 255, 0.93);
-  backdrop-filter: blur(32px) saturate(140%) brightness(1.1);
-  -webkit-backdrop-filter: blur(32px) saturate(140%) brightness(1.1);
+  backdrop-filter: blur(16px) saturate(130%) brightness(1.05);
+  -webkit-backdrop-filter: blur(16px) saturate(130%) brightness(1.05);
   box-shadow:
     inset 0 1px 1px rgba(255, 255, 255, 1),
     0 8px 24px rgba(0, 0, 0, 0.15);
 }
 
+@media (min-width: 640px) {
+  .frost-strong {
+    backdrop-filter: blur(32px) saturate(140%) brightness(1.1);
+    -webkit-backdrop-filter: blur(32px) saturate(140%) brightness(1.1);
+  }
+}
+
 /* Lighter variant for subtle elements */
 .frost-light {
   background: rgba(255, 255, 255, 0.55);
-  backdrop-filter: blur(16px) saturate(120%) brightness(1.05);
-  -webkit-backdrop-filter: blur(16px) saturate(120%) brightness(1.05);
+  backdrop-filter: blur(8px) saturate(110%) brightness(1.02);
+  -webkit-backdrop-filter: blur(8px) saturate(110%) brightness(1.02);
   box-shadow:
     inset 0 1px 1px rgba(255, 255, 255, 0.8),
     0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+@media (min-width: 640px) {
+  .frost-light {
+    backdrop-filter: blur(16px) saturate(120%) brightness(1.05);
+    -webkit-backdrop-filter: blur(16px) saturate(120%) brightness(1.05);
+  }
 }
 
 /* Refractive glass for input fields */
@@ -233,13 +256,21 @@ body {
 
 .text-glow {
   text-shadow:
-    0 0 5px rgba(255, 255, 255, 1),
-    0 0 15px rgba(255, 255, 255, 1),
-    0 0 30px rgba(255, 255, 255, 1),
-    0 0 60px rgba(255, 255, 255, 1),
-    0 0 100px rgba(255, 255, 255, 0.95),
-    0 0 150px rgba(255, 255, 255, 0.8),
-    0 0 200px rgba(255, 255, 255, 0.6);
+    0 0 10px rgba(255, 255, 255, 1),
+    0 0 30px rgba(255, 255, 255, 0.9);
+}
+
+@media (min-width: 640px) {
+  .text-glow {
+    text-shadow:
+      0 0 5px rgba(255, 255, 255, 1),
+      0 0 15px rgba(255, 255, 255, 1),
+      0 0 30px rgba(255, 255, 255, 1),
+      0 0 60px rgba(255, 255, 255, 1),
+      0 0 100px rgba(255, 255, 255, 0.95),
+      0 0 150px rgba(255, 255, 255, 0.8),
+      0 0 200px rgba(255, 255, 255, 0.6);
+  }
 }
 
 @keyframes popUp {
