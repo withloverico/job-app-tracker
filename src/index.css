@@ -14,22 +14,26 @@ body {
 }
 
 /* 
- * Liquid Glass Base Classes 
- * Inspired by the provided template:
- * bg-black/20 border-white/50 backdrop-blur-sm
- * inset shadow + drop shadows + corner gradients
+ * High-Contrast Refractive Glass Base Classes 
+ * Increased opacity for readable dark text.
+ * High blur and saturation for "refraction" of background colors.
  */
 .frost, .frost-strong, .frost-light {
-  /* You can switch this to rgba(0,0,0,0.2) if you want it exactly like the template, 
-     but rgba(255,255,255,0.2) helps keep the existing dark text readable. */
-  background: rgba(255, 255, 255, 0.2);
-  backdrop-filter: blur(8px) saturate(1.2);
-  -webkit-backdrop-filter: blur(8px) saturate(1.2);
-  border: 1px solid rgba(255, 255, 255, 0.5);
+  /* A much thicker white base to ensure text readability against busy backgrounds */
+  background: rgba(255, 255, 255, 0.65);
+  /* The secret to refraction: high blur + boosted saturation to pull colors through */
+  backdrop-filter: blur(16px) saturate(150%);
+  -webkit-backdrop-filter: blur(16px) saturate(150%);
+  
+  border: 1px solid rgba(255, 255, 255, 0.6);
+  /* Complex shadows: 
+     1. Sharp top white edge (liquid feel)
+     2. Soft white inner glow
+     3. Drop shadow to separate from background */
   box-shadow:
-    inset 0 1px 0px rgba(255, 255, 255, 0.75),
-    0 0 9px rgba(0, 0, 0, 0.2),
-    0 3px 8px rgba(0, 0, 0, 0.15);
+    inset 0 1px 1px rgba(255, 255, 255, 0.9),
+    inset 0 0 20px rgba(255, 255, 255, 0.4),
+    0 4px 12px rgba(0, 0, 0, 0.1);
   position: relative;
 }
 
@@ -39,14 +43,14 @@ body {
   z-index: 10;
 }
 
-/* Top-left to bottom-right strong light reflection */
+/* Top-left to bottom-right strong light reflection to simulate curved glass */
 .frost::before, .frost-strong::before, .frost-light::before {
   content: '';
   position: absolute;
   inset: 0;
   border-radius: inherit;
-  background: linear-gradient(to bottom right, rgba(255, 255, 255, 0.6), transparent, transparent);
-  opacity: 0.7;
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.5) 0%, transparent 50%, transparent 100%);
+  opacity: 0.8;
   pointer-events: none;
   z-index: 1;
 }
@@ -57,41 +61,54 @@ body {
   position: absolute;
   inset: 0;
   border-radius: inherit;
-  background: linear-gradient(to top left, rgba(255, 255, 255, 0.3), transparent, transparent);
-  opacity: 0.5;
+  background: linear-gradient(315deg, rgba(255, 255, 255, 0.3) 0%, transparent 50%, transparent 100%);
+  opacity: 0.6;
   pointer-events: none;
   z-index: 1;
 }
 
+/* Stronger variant for modals or highlighted elements */
 .frost-strong {
-  background: rgba(255, 255, 255, 0.3);
-  backdrop-filter: blur(16px) saturate(1.3);
-  -webkit-backdrop-filter: blur(16px) saturate(1.3);
+  background: rgba(255, 255, 255, 0.75);
+  backdrop-filter: blur(24px) saturate(180%);
+  -webkit-backdrop-filter: blur(24px) saturate(180%);
+  box-shadow:
+    inset 0 1px 1px rgba(255, 255, 255, 1),
+    inset 0 0 30px rgba(255, 255, 255, 0.5),
+    0 8px 24px rgba(0, 0, 0, 0.15);
 }
 
+/* Lighter variant for subtle elements */
 .frost-light {
-  background: rgba(255, 255, 255, 0.1);
-  backdrop-filter: blur(4px) saturate(1.1);
-  -webkit-backdrop-filter: blur(4px) saturate(1.1);
+  background: rgba(255, 255, 255, 0.45);
+  backdrop-filter: blur(12px) saturate(130%);
+  -webkit-backdrop-filter: blur(12px) saturate(130%);
+  box-shadow:
+    inset 0 1px 1px rgba(255, 255, 255, 0.7),
+    0 2px 8px rgba(0, 0, 0, 0.05);
 }
 
+/* Refractive glass for input fields */
 .frost-input {
-  background: rgba(255, 255, 255, 0.2);
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
-  border: 1px solid rgba(255, 255, 255, 0.4);
+  /* Slightly more transparent than cards so they look "inset" */
+  background: rgba(255, 255, 255, 0.5);
+  backdrop-filter: blur(12px) saturate(120%);
+  -webkit-backdrop-filter: blur(12px) saturate(120%);
+  border: 1px solid rgba(255, 255, 255, 0.5);
+  /* Inset dark shadow to look pressed in, plus a subtle bottom highlight */
   box-shadow: 
-    inset 0 1px 2px rgba(0, 0, 0, 0.05),
-    inset 0 1px 0px rgba(255, 255, 255, 0.5);
+    inset 0 2px 4px rgba(0, 0, 0, 0.05),
+    0 1px 0px rgba(255, 255, 255, 0.6);
   position: relative;
+  transition: all 0.2s ease;
 }
 
 .frost-input:focus {
-  background: rgba(255, 255, 255, 0.3);
-  border-color: rgba(255, 255, 255, 0.8);
+  background: rgba(255, 255, 255, 0.7);
+  border-color: rgba(194, 117, 58, 0.6); /* Amber highlight */
   box-shadow:
-    inset 0 1px 0px rgba(255, 255, 255, 0.75),
-    0 0 0 2px rgba(194, 117, 58, 0.3);
+    inset 0 2px 4px rgba(0, 0, 0, 0.05),
+    0 0 0 3px rgba(194, 117, 58, 0.2);
   outline: none;
 }
 
