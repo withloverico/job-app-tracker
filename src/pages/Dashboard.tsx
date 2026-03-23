@@ -147,8 +147,8 @@ export default function Dashboard() {
         </div>
 
         {/* Controls */}
-        <div className="flex flex-col sm:flex-row gap-3 mb-6">
-          <div className="relative flex-1">
+        <div className="flex gap-3 mb-6 overflow-x-auto scrollbar-hide pb-1">
+          <div className="relative flex-1 min-w-[180px]">
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-stone-400 z-10" />
             <input
               type="text"
@@ -159,46 +159,44 @@ export default function Dashboard() {
             />
           </div>
 
-          <div className="flex gap-2">
-            <div className="relative flex-1 sm:flex-none">
-              <ArrowUpDown className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-stone-400 pointer-events-none z-10" />
-              <select
-                value={sortField}
-                onChange={(e) => setSortField(e.target.value as SortField)}
-                className="appearance-none frost-input text-stone-800 rounded-lg pl-9 pr-8 py-2 text-sm cursor-pointer w-full"
-              >
-                <option value="created_at">Date Added</option>
-                <option value="application_deadline">Deadline</option>
-                <option value="company_name">Company</option>
-              </select>
-            </div>
-
-            <div className="flex frost rounded-lg">
-              <button
-                onClick={() => setViewMode('card')}
-                className={`p-2 transition-colors ${viewMode === 'card' ? 'bg-white/50 text-stone-800' : 'text-stone-500 hover:text-stone-800'}`}
-              >
-                <LayoutGrid className="w-4 h-4" />
-              </button>
-              <button
-                onClick={() => setViewMode('table')}
-                className={`p-2 transition-colors ${viewMode === 'table' ? 'bg-white/50 text-stone-800' : 'text-stone-500 hover:text-stone-800'}`}
-              >
-                <List className="w-4 h-4" />
-              </button>
-            </div>
-
-            <button
-              onClick={() => {
-                setEditingApp(null)
-                setModalOpen(true)
-              }}
-              className="flex items-center gap-2 px-4 py-2 bg-amber-700 hover:bg-amber-600 text-white text-sm font-medium rounded-lg transition-colors shadow-sm flex-shrink-0"
+          <div className="relative flex-shrink-0">
+            <ArrowUpDown className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-stone-400 pointer-events-none z-10" />
+            <select
+              value={sortField}
+              onChange={(e) => setSortField(e.target.value as SortField)}
+              className="appearance-none frost-input text-stone-800 rounded-lg pl-9 pr-8 py-2 text-sm cursor-pointer"
             >
-              <Plus className="w-4 h-4" />
-              <span className="hidden sm:inline">Add Job</span>
+              <option value="created_at">Date Added</option>
+              <option value="application_deadline">Deadline</option>
+              <option value="company_name">Company</option>
+            </select>
+          </div>
+
+          <div className="flex frost rounded-lg flex-shrink-0">
+            <button
+              onClick={() => setViewMode('card')}
+              className={`p-2 transition-colors ${viewMode === 'card' ? 'bg-white/50 text-stone-800' : 'text-stone-500 hover:text-stone-800'}`}
+            >
+              <LayoutGrid className="w-4 h-4" />
+            </button>
+            <button
+              onClick={() => setViewMode('table')}
+              className={`p-2 transition-colors ${viewMode === 'table' ? 'bg-white/50 text-stone-800' : 'text-stone-500 hover:text-stone-800'}`}
+            >
+              <List className="w-4 h-4" />
             </button>
           </div>
+
+          <button
+            onClick={() => {
+              setEditingApp(null)
+              setModalOpen(true)
+            }}
+            className="flex items-center gap-2 px-4 py-2 bg-amber-700 hover:bg-amber-600 text-white text-sm font-medium rounded-lg transition-colors shadow-sm flex-shrink-0"
+          >
+            <Plus className="w-4 h-4" />
+            <span className="hidden sm:inline">Add Job</span>
+          </button>
         </div>
 
         {/* Loading */}
@@ -251,7 +249,7 @@ export default function Dashboard() {
               <div
                 key={app.id}
                 onClick={() => openEdit(app)}
-                className="frost rounded-xl p-4 hover:bg-white/40 transition-all cursor-pointer group shadow-sm"
+                className="frost-strong rounded-xl p-4 hover:bg-white/40 transition-all cursor-pointer group shadow-sm"
               >
                 <div className="flex items-start justify-between mb-3">
                   <div className="min-w-0 flex-1">

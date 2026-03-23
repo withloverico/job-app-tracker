@@ -33,7 +33,6 @@ body {
     inset 0 1px 1px rgba(255, 255, 255, 1),
     0 4px 12px rgba(0, 0, 0, 0.1);
   position: relative;
-  overflow: hidden;
 }
 
 /* Ensure content stays above the pseudo-element gradients */
