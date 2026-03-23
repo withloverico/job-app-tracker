@@ -36,6 +36,7 @@ export default function AddJobModal({
   const [salaryMax, setSalaryMax] = useState('')
   const [salaryCurrency, setSalaryCurrency] = useState('USD')
   const [salaryType, setSalaryType] = useState('annual')
+  const [equity, setEquity] = useState('')
   const [requiredSkills, setRequiredSkills] = useState<string[]>([])
   const [niceToHaveSkills, setNiceToHaveSkills] = useState<string[]>([])
   const [applicationDeadline, setApplicationDeadline] = useState('')
@@ -57,6 +58,7 @@ export default function AddJobModal({
       setSalaryMax(editingApp.salary_max?.toString() || '')
       setSalaryCurrency(editingApp.salary_currency || 'USD')
       setSalaryType(editingApp.salary_type || 'annual')
+      setEquity(editingApp.equity || '')
       setRequiredSkills(editingApp.required_skills || [])
       setNiceToHaveSkills(editingApp.nice_to_have_skills || [])
       setApplicationDeadline(editingApp.application_deadline || '')
@@ -82,6 +84,7 @@ export default function AddJobModal({
     setSalaryMax('')
     setSalaryCurrency('USD')
     setSalaryType('annual')
+    setEquity('')
     setRequiredSkills([])
     setNiceToHaveSkills([])
     setApplicationDeadline('')
@@ -111,6 +114,7 @@ export default function AddJobModal({
     if (data.application_deadline) setApplicationDeadline(data.application_deadline)
     if (data.date_posted) setDatePosted(data.date_posted)
     if (data.job_summary) setJobSummary(data.job_summary)
+    if (data.equity) setEquity(data.equity)
 
     const match = findDuplicate(
       applications,
@@ -168,6 +172,7 @@ export default function AddJobModal({
       salary_max: salaryMax ? parseInt(salaryMax) : null,
       salary_currency: salaryMin || salaryMax ? salaryCurrency : null,
       salary_type: salaryMin || salaryMax ? salaryType : null,
+      equity: equity || null,
       required_skills: requiredSkills,
       nice_to_have_skills: niceToHaveSkills,
       application_deadline: applicationDeadline || null,
@@ -346,6 +351,11 @@ export default function AddJobModal({
                 <option value="hourly">Hourly</option>
               </select>
             </div>
+          </div>
+
+          <div>
+            <label className="block text-sm font-medium text-stone-600 mb-1">Equity</label>
+            <input type="text" value={equity} onChange={(e) => setEquity(e.target.value)} placeholder="e.g. 0.2% – 0.8%" className={inputClass} />
           </div>
 
           <SkillInput label="Required Skills" skills={requiredSkills} onChange={setRequiredSkills} variant="required" />

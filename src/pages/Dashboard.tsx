@@ -388,9 +388,11 @@ export default function Dashboard() {
                       </span>
                     </div>
                   )}
-                  {formatSalary(app) && (
-                    <p className="text-emerald-700 text-xs font-medium">{formatSalary(app)}</p>
-                  )}
+                  <p className="text-xs font-medium">
+                    <span className="text-emerald-700">{formatSalary(app) || 'N/A'}</span>
+                    <span className="text-stone-300 mx-1.5">|</span>
+                    <span className="text-stone-500">{app.equity || 'N/A'}</span>
+                  </p>
                   {app.date_posted && (
                     <div className="flex items-center gap-1.5 text-xs">
                       <Calendar className="w-3.5 h-3.5 flex-shrink-0" />

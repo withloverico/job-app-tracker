@@ -70,23 +70,26 @@ export default async function handler(req: any, res: any) {
         messages: [
           {
             role: 'user',
-            content: `Extract job posting details from the following text. Return ONLY a valid JSON object with no extra text, markdown, or code fences. Extract these fields:
+            content: `Extract job posting details from the following text. Scan the ENTIRE page content — salary, equity, and compensation details may appear anywhere on the page (sidebars, footers, banners, separate sections), not just under a "Compensation" heading. Return ONLY a valid JSON object with no extra text, markdown, or code fences. Extract these fields:
 
 - company_name (string)
 - job_title (string)
 - location (string or null)
 - is_remote (boolean)
-- salary_min (number or null)
-- salary_max (number or null)
+- salary_min (number or null — convert shorthand like "$140K" to 140000, "$1.2M" to 1200000)
+- salary_max (number or null — same conversion rules)
 - salary_currency (string or null, e.g. "USD", "EUR")
 - salary_type (string: "hourly" or "annual")
+- equity (string or null — e.g. "0.2% – 0.8%", stock option/RSU details if mentioned anywhere)
 - required_skills (array of strings)
 - nice_to_have_skills (array of strings)
 - application_deadline (ISO date string or null)
 - date_posted (ISO date string or null — when the job was originally posted)
 - job_summary (2-3 sentence summary of the role)
 
-Return null for any field that cannot be found. Here is the job posting text:
+Important: Look for compensation data throughout the entire page, including ranges like "$140K – $220K", "150,000 - 200,000", or "Estimated Base Salary" sections. Convert all salary values to full numbers (no "K" or "M" suffixes). Return null for any field that cannot be found.
+
+Here is the job posting text:
 
 ${content}`,
           },
