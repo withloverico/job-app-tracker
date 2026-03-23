@@ -123,7 +123,7 @@ export default function Dashboard() {
   }
 
   return (
-    <div className="min-h-dvh">
+    <div className="min-h-dvh flex flex-col">
       <Header />
 
       <main className="max-w-7xl mx-auto px-4 sm:px-6 py-6">
@@ -149,7 +149,7 @@ export default function Dashboard() {
         {/* Controls */}
         <div className="flex flex-col sm:flex-row gap-3 mb-6">
           <div className="relative flex-1">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-stone-400" />
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-stone-400 z-10" />
             <input
               type="text"
               placeholder="Search company or job title..."
@@ -211,25 +211,27 @@ export default function Dashboard() {
         {/* Empty state */}
         {!loading && applications.length === 0 && (
           <div className="text-center py-20">
-            <div className="frost w-16 h-16 rounded-2xl flex items-center justify-center mx-auto mb-4">
-              <Plus className="w-8 h-8 text-stone-400" />
+            <div className="frost rounded-2xl p-8 max-w-md mx-auto shadow-sm">
+              <div className="frost-strong w-16 h-16 rounded-2xl flex items-center justify-center mx-auto mb-4">
+                <Plus className="w-8 h-8 text-stone-400" />
+              </div>
+              <h3 className="text-lg font-medium text-stone-800 mb-2">No applications yet</h3>
+              <p className="text-stone-500 mb-6">
+                Add your first job application by clicking the button below or pressing{' '}
+                <kbd className="px-1.5 py-0.5 frost-strong text-xs rounded font-mono">
+                  Cmd+K
+                </kbd>
+              </p>
+              <button
+                onClick={() => {
+                  setEditingApp(null)
+                  setModalOpen(true)
+                }}
+                className="px-6 py-2.5 bg-amber-700 hover:bg-amber-600 text-white font-medium rounded-lg transition-colors shadow-sm"
+              >
+                Add Your First Job
+              </button>
             </div>
-            <h3 className="text-lg font-medium text-stone-800 mb-2">No applications yet</h3>
-            <p className="text-stone-500 mb-6 max-w-md mx-auto">
-              Add your first job application by clicking the button below or pressing{' '}
-              <kbd className="px-1.5 py-0.5 frost text-xs rounded font-mono">
-                Cmd+K
-              </kbd>
-            </p>
-            <button
-              onClick={() => {
-                setEditingApp(null)
-                setModalOpen(true)
-              }}
-              className="px-6 py-2.5 bg-amber-700 hover:bg-amber-600 text-white font-medium rounded-lg transition-colors shadow-sm"
-            >
-              Add Your First Job
-            </button>
           </div>
         )}
 
@@ -380,12 +382,22 @@ export default function Dashboard() {
         )}
       </main>
 
+      <footer className="mt-auto flex justify-center py-6">
+        <a
+          href="https://linkedin.com/in/ricobolos"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="frost rounded-full px-4 py-2 text-xs text-stone-500 hover:text-stone-700 transition-colors shadow-sm"
+        >
+          Built with love by <span className="font-medium text-stone-700">Rico Bolos</span>
+        </a>
+      </footer>
+
       <AddJobModal
         open={modalOpen}
         onClose={() => {
           setModalOpen(false)
           setEditingApp(null)
-          reload()
         }}
         onSave={handleSave}
         editingApp={editingApp}

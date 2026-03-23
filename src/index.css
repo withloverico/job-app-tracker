@@ -2,9 +2,10 @@
 
 body {
   margin: 0;
+  font-family: 'Inter Tight', sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  background: url('/bg.jpg') no-repeat center center fixed;
+  background: url('/bg.png') no-repeat center center fixed;
   background-size: cover;
   min-height: 100dvh;
 }
