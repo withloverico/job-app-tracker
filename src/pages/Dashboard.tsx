@@ -192,7 +192,19 @@ export default function Dashboard() {
       <main className="flex-1 overflow-y-auto overflow-x-hidden pt-14 pb-16">
         <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 py-6">
         {/* Status summary bar */}
-        <div className="flex gap-2 overflow-x-auto pb-2 mb-6 scrollbar-hide dash-enter">
+        <div className="flex gap-2 overflow-x-auto pb-2 mb-6 scrollbar-hide dash-enter items-center">
+          <button
+            onClick={() => setStatusFilter('all')}
+            className={`flex items-center px-3 py-1.5 rounded-lg text-xs font-medium whitespace-nowrap transition-colors frost-strong ${
+              statusFilter === 'all'
+                ? 'text-stone-800 shadow-sm ring-2 ring-amber-600/30'
+                : 'text-stone-600 hover:text-stone-800'
+            }`}
+          >
+            All
+            <span className="text-stone-400 ml-1.5">{applications.length}</span>
+          </button>
+          <div className="w-px h-5 bg-stone-300/50 flex-shrink-0" />
           {STATUSES.map((s) => (
             <button
               key={s}
