@@ -197,10 +197,10 @@ export default function Dashboard() {
             <button
               key={s}
               onClick={() => setStatusFilter(statusFilter === s ? 'all' : s)}
-              className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium whitespace-nowrap transition-colors ${
+              className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium whitespace-nowrap transition-colors frost-strong ${
                 statusFilter === s
-                  ? 'frost-strong text-stone-800 shadow-sm'
-                  : 'frost-light text-stone-600 hover:text-stone-800'
+                  ? 'text-stone-800 shadow-sm ring-2 ring-amber-600/30'
+                  : 'text-stone-600 hover:text-stone-800'
               }`}
             >
               <span className={`w-2 h-2 rounded-full ${STATUS_DOT_COLORS[s]}`} />
@@ -219,7 +219,7 @@ export default function Dashboard() {
               placeholder="Search company or job title..."
               value={search}
               onChange={(e) => setSearch(e.target.value)}
-              className="w-full frost-input text-stone-800 rounded-lg pl-9 pr-3 py-2 text-sm placeholder:text-stone-400"
+              className="w-full frost-strong text-stone-800 rounded-lg pl-9 pr-3 py-2 text-sm placeholder:text-stone-400 focus:ring-2 focus:ring-amber-600/30 outline-none"
             />
           </div>
 
@@ -227,7 +227,7 @@ export default function Dashboard() {
             <button
               ref={sortButtonRef}
               onClick={() => setSortOpen(!sortOpen)}
-              className="flex items-center gap-2 frost-input text-stone-800 rounded-lg pl-3 pr-3 py-2 text-sm cursor-pointer"
+              className="flex items-center gap-2 frost-strong text-stone-800 rounded-lg pl-3 pr-3 py-2 text-sm cursor-pointer"
             >
               <ArrowUpDown className="w-4 h-4 text-stone-400" />
               {{ created_at: 'Date Added', application_deadline: 'Deadline', company_name: 'Company' }[sortField]}
