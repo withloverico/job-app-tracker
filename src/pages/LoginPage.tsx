@@ -12,18 +12,19 @@ import {
   ChevronsDown,
 } from 'lucide-react'
 
-function TypeWriter({ text, className, delay = 0, onDone }: { text: string; className?: string; delay?: number; onDone?: () => void }) {
+function TypeWriter({ text, className, delay = 0, onDone, active }: { text: string; className?: string; delay?: number; onDone?: () => void; active: boolean }) {
   const [displayed, setDisplayed] = useState('')
   const [started, setStarted] = useState(false)
 
   useEffect(() => {
+    if (!active) return
     if (delay === 0) { setStarted(true); return }
     const timer = setTimeout(() => setStarted(true), delay)
     return () => clearTimeout(timer)
-  }, [delay])
+  }, [active, delay])
 
   useEffect(() => {
-    if (!started) return
+    if (!started || !active) return
     if (displayed.length >= text.length) {
       onDone?.()
       return
@@ -32,7 +33,7 @@ function TypeWriter({ text, className, delay = 0, onDone }: { text: string; clas
       setDisplayed(text.slice(0, displayed.length + 1))
     }, 25)
     return () => clearTimeout(timer)
-  }, [started, displayed, text, onDone])
+  }, [started, active, displayed, text, onDone])
 
   return (
     <span className={className}>
@@ -59,7 +60,7 @@ export default function LoginPage() {
           }
         })
       },
-      { threshold: 0.05 }
+      { threshold: 0.2 }
     )
 
     Object.values(sectionRefs.current).forEach((el) => {
@@ -68,6 +69,10 @@ export default function LoginPage() {
 
     return () => observer.disconnect()
   }, [])
+
+  function popClass(section: string) {
+    return visibleSections.has(section) ? 'pop-up' : 'opacity-0'
+  }
 
   useEffect(() => {
     const timer = setTimeout(() => setSplashed(true), 400)
@@ -153,7 +158,7 @@ export default function LoginPage() {
         )}
 
         {/* Login card */}
-        <div className="relative z-10 w-full max-w-sm text-center frost-strong rounded-2xl p-8 shadow-lg slide-up">
+        <div className="relative z-10 w-full max-w-sm text-center frost-strong rounded-2xl p-8 shadow-lg pop-up">
           <div className="flex justify-center mb-6">
             <img src="/logo.png" alt="job tracker" className="w-20 h-20 rounded-2xl object-cover shadow-sm" />
           </div>
@@ -202,21 +207,13 @@ export default function LoginPage() {
         <div
           id="why"
           ref={(el) => { sectionRefs.current['why'] = el }}
-          className={`max-w-3xl mx-auto text-center mb-20 ${visibleSections.has('why') ? 'slide-up' : 'opacity-0'}`}
+          className="max-w-3xl mx-auto text-center mb-20"
         >
-          <div className="frost-strong rounded-2xl p-8 sm:p-10 shadow-sm">
+          <div className={`frost-strong rounded-2xl p-8 sm:p-10 shadow-sm ${popClass('why')}`} style={{ animationDelay: '0.15s' }}>
             <h2 className="text-3xl sm:text-4xl font-bold text-stone-800 mb-4">
-              {visibleSections.has('why') ? (
-                <>
-                  <TypeWriter text="job hunting is chaos." onDone={() => setLine1Done(true)} />
-                  <br />
-                  {line1Done && (
-                    <TypeWriter text="this brings order." className="text-amber-700" delay={100} />
-                  )}
-                </>
-              ) : (
-                <>&nbsp;</>
-              )}
+              <TypeWriter text="job hunting is chaos." active={visibleSections.has('why')} onDone={() => setLine1Done(true)} />
+              <br />
+              <TypeWriter text="this brings order." className="text-amber-700" delay={100} active={visibleSections.has('why') && line1Done} />
             </h2>
             <p className="text-stone-500 text-base sm:text-lg leading-relaxed">
               spreadsheets break down. bookmarks get lost. emails pile up.
@@ -236,9 +233,9 @@ export default function LoginPage() {
             <div
               key={f.title}
               className={`frost-strong rounded-2xl p-6 shadow-sm ${
-                visibleSections.has('features') ? 'slide-up' : 'opacity-0'
+                popClass('features')
               }`}
-              style={visibleSections.has('features') ? { animationDelay: `${i * 0.1}s` } : undefined}
+              style={{ animationDelay: `${0.15 + i * 0.1}s` }}
             >
               <div className="w-12 h-12 rounded-xl bg-amber-100/80 flex items-center justify-center text-amber-700 mb-4">
                 {f.icon}
@@ -253,7 +250,7 @@ export default function LoginPage() {
         <div
           id="how"
           ref={(el) => { sectionRefs.current['how'] = el }}
-          className={`max-w-3xl mx-auto mb-24 ${visibleSections.has('how') ? 'slide-up' : 'opacity-0'}`}
+          className="max-w-3xl mx-auto mb-24"
         >
           <h2 className="text-2xl sm:text-3xl font-bold text-stone-800 text-glow text-center mb-10">
             how it works
@@ -263,9 +260,9 @@ export default function LoginPage() {
               <div
                 key={step.num}
                 className={`frost-strong rounded-2xl p-6 flex gap-5 items-start shadow-sm ${
-                  visibleSections.has('how') ? 'slide-up' : 'opacity-0'
+                  popClass('how')
                 }`}
-                style={visibleSections.has('how') ? { animationDelay: `${i * 0.15}s` } : undefined}
+                style={{ animationDelay: `${0.15 + i * 0.12}s` }}
               >
                 <div className="w-10 h-10 rounded-full bg-amber-700 text-white flex items-center justify-center font-bold text-lg flex-shrink-0">
                   {step.num}
@@ -286,9 +283,9 @@ export default function LoginPage() {
         <div
           id="cta"
           ref={(el) => { sectionRefs.current['cta'] = el }}
-          className={`max-w-2xl mx-auto text-center mb-24 ${visibleSections.has('cta') ? 'slide-up' : 'opacity-0'}`}
+          className="max-w-2xl mx-auto text-center mb-24"
         >
-          <div className="frost-strong rounded-2xl p-8 sm:p-12 shadow-lg">
+          <div className={`frost-strong rounded-2xl p-8 sm:p-12 shadow-lg ${popClass('cta')}`} style={{ animationDelay: '0.15s' }}>
             <h2 className="text-2xl sm:text-3xl font-bold text-stone-800 mb-3">
               ready to get organized?
             </h2>
@@ -309,7 +306,7 @@ export default function LoginPage() {
         <div
           id="tech"
           ref={(el) => { sectionRefs.current['tech'] = el }}
-          className={`max-w-3xl mx-auto text-center mb-12 ${visibleSections.has('tech') ? 'slide-up' : 'opacity-0'}`}
+          className="max-w-3xl mx-auto text-center mb-12"
         >
           <h2 className="text-2xl sm:text-3xl font-bold text-stone-800 text-glow text-center mb-8">
             built with
@@ -319,16 +316,16 @@ export default function LoginPage() {
               <div
                 key={tech}
                 className={`frost-strong rounded-xl px-4 py-3 shadow-sm text-center ${
-                  visibleSections.has('tech') ? 'slide-up' : 'opacity-0'
+                  popClass('tech')
                 }`}
-                style={visibleSections.has('tech') ? { animationDelay: `${i * 0.08}s` } : undefined}
+                style={{ animationDelay: `${0.15 + i * 0.08}s` }}
               >
                 <p className="text-sm sm:text-base font-semibold text-stone-800">{tech}</p>
               </div>
             ))}
           </div>
 
-          <div className="frost-strong rounded-full px-6 py-3 inline-flex items-center gap-2 shadow-sm">
+          <div className={`frost-strong rounded-full px-6 py-3 inline-flex items-center gap-2 shadow-sm ${popClass('tech')}`} style={{ animationDelay: '0.4s' }}>
             <span className="text-sm text-stone-500">built with love by</span>
             <a
               href="https://linkedin.com/in/ricobolos"
