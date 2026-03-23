@@ -2,7 +2,7 @@
 
 A glassmorphism-styled job application tracker with AI-powered job posting extraction, Google OAuth, and a frosted glass UI. Paste a job URL and let Claude parse the title, company, salary, equity, and resume-ready skills automatically.
 
-**Live:** [tracker-steel.vercel.app](https://tracker-steel.vercel.app)
+**Live:** [jobtracker.withloverico.me](https://jobtracker.withloverico.me)
 
 ## Features
 
