@@ -66,7 +66,7 @@ export default async function handler(req: any, res: any) {
       },
       body: JSON.stringify({
         model: 'claude-sonnet-4-20250514',
-        max_tokens: 1024,
+        max_tokens: 2048,
         messages: [
           {
             role: 'user',
@@ -81,8 +81,8 @@ export default async function handler(req: any, res: any) {
 - salary_currency (string or null, e.g. "USD", "EUR")
 - salary_type (string: "hourly" or "annual")
 - equity (string or null — e.g. "0.2% – 0.8%", stock option/RSU details if mentioned anywhere)
-- required_skills (array of strings)
-- nice_to_have_skills (array of strings)
+- required_skills (array of strings — ONLY concrete technical skills, tools, frameworks, languages, and platforms that belong in a resume skills section. Examples: "React.js", "TypeScript", "Node.js", "AWS", "Docker", "Figma", "PostgreSQL", "REST APIs", "GraphQL". Never include soft skills, personality traits, degree requirements, or abstract phrases like "Technical curiosity" or "Team collaboration". Stick to things you'd list in a "Skills" or "Technologies" section on a resume.)
+- nice_to_have_skills (array of strings — same rules as required_skills: only concrete tools/technologies. Additionally, infer 3-5 relevant skills NOT explicitly listed in the job description that would strengthen an application based on the role and tech stack. For example, if the JD mentions React and Node.js, you might add "Next.js", "Jest", "Tailwind CSS" as inferred nice-to-haves.)
 - application_deadline (ISO date string or null)
 - date_posted (ISO date string or null — when the job was originally posted)
 - job_summary (2-3 sentence summary of the role)
