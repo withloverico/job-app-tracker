@@ -1,7 +1,7 @@
 import { useState, useRef, useEffect, useCallback } from 'react'
 import { createPortal } from 'react-dom'
-import type { Status } from '../types'
-import { STATUSES, STATUS_COLORS, STATUS_DOT_COLORS } from '../types'
+import type { Status } from '../../types'
+import { STATUSES, STATUS_COLORS, STATUS_DOT_COLORS } from '../../types'
 
 interface StatusDropdownProps {
   status: Status

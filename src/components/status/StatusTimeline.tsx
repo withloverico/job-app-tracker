@@ -1,5 +1,5 @@
-import type { StatusHistoryEntry } from '../types'
-import { STATUS_DOT_COLORS } from '../types'
+import type { StatusHistoryEntry } from '../../types'
+import { STATUS_DOT_COLORS } from '../../types'
 
 function timeAgo(dateStr: string): string {
   const diff = Date.now() - new Date(dateStr).getTime()

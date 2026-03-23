@@ -1,5 +1,5 @@
-import type { Status } from '../types'
-import { STATUS_COLORS } from '../types'
+import type { Status } from '../../types'
+import { STATUS_COLORS } from '../../types'
 
 export default function StatusBadge({ status, className = '' }: { status: Status; className?: string }) {
   return (

@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { Loader2 } from 'lucide-react'
-import type { Status } from '../types'
-import { STATUS_DOT_COLORS } from '../types'
+import type { Status } from '../../types'
+import { STATUS_DOT_COLORS } from '../../types'
 
 interface StatusChangeNotePopupProps {
   oldStatus: Status

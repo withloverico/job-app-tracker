@@ -1,5 +1,5 @@
-import type { Status } from '../types'
-import { STATUSES, STATUS_DOT_COLORS } from '../types'
+import type { Status } from '../../types'
+import { STATUSES, STATUS_DOT_COLORS } from '../../types'
 import CustomSelect from './CustomSelect'
 
 interface StatusSelectProps {
