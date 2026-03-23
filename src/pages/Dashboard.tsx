@@ -266,13 +266,13 @@ export default function Dashboard() {
           <div className="flex frost-strong rounded-lg flex-shrink-0">
             <button
               onClick={() => setViewMode('card')}
-              className={`p-2 transition-colors ${viewMode === 'card' ? 'bg-white/50 text-stone-800' : 'text-stone-500 hover:text-stone-800'}`}
+              className={`p-2 transition-colors ${viewMode === 'card' ? 'bg-white/50 text-amber-700' : 'text-stone-500 hover:text-stone-800'}`}
             >
               <LayoutGrid className="w-4 h-4" />
             </button>
             <button
               onClick={() => setViewMode('table')}
-              className={`p-2 transition-colors ${viewMode === 'table' ? 'bg-white/50 text-stone-800' : 'text-stone-500 hover:text-stone-800'}`}
+              className={`p-2 transition-colors ${viewMode === 'table' ? 'bg-white/50 text-amber-700' : 'text-stone-500 hover:text-stone-800'}`}
             >
               <List className="w-4 h-4" />
             </button>
