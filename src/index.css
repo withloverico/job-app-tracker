@@ -13,106 +13,85 @@ body {
   min-height: 100dvh;
 }
 
-.frost {
-  background: rgba(255, 255, 255, 0.15);
-  backdrop-filter: blur(16px) saturate(1.2);
-  -webkit-backdrop-filter: blur(16px) saturate(1.2);
-  border-radius: 20px;
-  border: 1px solid rgba(255, 255, 255, 0.2);
+/* 
+ * Liquid Glass Base Classes 
+ * Inspired by the provided template:
+ * bg-black/20 border-white/50 backdrop-blur-sm
+ * inset shadow + drop shadows + corner gradients
+ */
+.frost, .frost-strong, .frost-light {
+  /* You can switch this to rgba(0,0,0,0.2) if you want it exactly like the template, 
+     but rgba(255,255,255,0.2) helps keep the existing dark text readable. */
+  background: rgba(255, 255, 255, 0.2);
+  backdrop-filter: blur(8px) saturate(1.2);
+  -webkit-backdrop-filter: blur(8px) saturate(1.2);
+  border: 1px solid rgba(255, 255, 255, 0.5);
   box-shadow:
-    0 8px 32px rgba(0, 0, 0, 0.1),
-    inset 0 1px 0 rgba(255, 255, 255, 0.3),
-    inset 0 -1px 0 rgba(255, 255, 255, 0.05),
-    inset 0 0 32px 16px rgba(255, 255, 255, 0.05);
+    inset 0 1px 0px rgba(255, 255, 255, 0.75),
+    0 0 9px rgba(0, 0, 0, 0.2),
+    0 3px 8px rgba(0, 0, 0, 0.15);
   position: relative;
-  overflow: hidden;
 }
 
-.frost::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: 1px;
-  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
-  pointer-events: none;
+/* Ensure content stays above the pseudo-element gradients */
+.frost > *, .frost-strong > *, .frost-light > * {
+  position: relative;
+  z-index: 10;
 }
 
-.frost::after {
+/* Top-left to bottom-right strong light reflection */
+.frost::before, .frost-strong::before, .frost-light::before {
   content: '';
   position: absolute;
-  top: 0;
-  left: 0;
-  width: 1px;
-  height: 100%;
-  background: linear-gradient(180deg, rgba(255, 255, 255, 0.4), transparent, rgba(255, 255, 255, 0.1));
+  inset: 0;
+  border-radius: inherit;
+  background: linear-gradient(to bottom right, rgba(255, 255, 255, 0.6), transparent, transparent);
+  opacity: 0.7;
   pointer-events: none;
+  z-index: 1;
+}
+
+/* Bottom-right to top-left subtle reflection */
+.frost::after, .frost-strong::after, .frost-light::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: linear-gradient(to top left, rgba(255, 255, 255, 0.3), transparent, transparent);
+  opacity: 0.5;
+  pointer-events: none;
+  z-index: 1;
 }
 
 .frost-strong {
-  background: rgba(255, 255, 255, 0.25);
-  backdrop-filter: blur(24px) saturate(1.3);
-  -webkit-backdrop-filter: blur(24px) saturate(1.3);
-  border-radius: 20px;
-  border: 1px solid rgba(255, 255, 255, 0.3);
-  box-shadow:
-    0 8px 32px rgba(0, 0, 0, 0.1),
-    inset 0 1px 0 rgba(255, 255, 255, 0.4),
-    inset 0 -1px 0 rgba(255, 255, 255, 0.1),
-    inset 0 0 32px 16px rgba(255, 255, 255, 0.1);
-  position: relative;
-  overflow: hidden;
-}
-
-.frost-strong::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: 1px;
-  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.5), transparent);
-  pointer-events: none;
-}
-
-.frost-strong::after {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 1px;
-  height: 100%;
-  background: linear-gradient(180deg, rgba(255, 255, 255, 0.5), transparent, rgba(255, 255, 255, 0.15));
-  pointer-events: none;
+  background: rgba(255, 255, 255, 0.3);
+  backdrop-filter: blur(16px) saturate(1.3);
+  -webkit-backdrop-filter: blur(16px) saturate(1.3);
 }
 
 .frost-light {
   background: rgba(255, 255, 255, 0.1);
-  backdrop-filter: blur(12px) saturate(1.2);
-  -webkit-backdrop-filter: blur(12px) saturate(1.2);
-  border-radius: 16px;
-  border: 1px solid rgba(255, 255, 255, 0.15);
-  box-shadow:
-    0 4px 16px rgba(0, 0, 0, 0.05),
-    inset 0 1px 0 rgba(255, 255, 255, 0.2),
-    inset 0 0 24px 8px rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(4px) saturate(1.1);
+  -webkit-backdrop-filter: blur(4px) saturate(1.1);
 }
 
 .frost-input {
   background: rgba(255, 255, 255, 0.2);
   backdrop-filter: blur(8px);
   -webkit-backdrop-filter: blur(8px);
-  border: 1px solid rgba(255, 255, 255, 0.25);
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.2);
+  border: 1px solid rgba(255, 255, 255, 0.4);
+  box-shadow: 
+    inset 0 1px 2px rgba(0, 0, 0, 0.05),
+    inset 0 1px 0px rgba(255, 255, 255, 0.5);
+  position: relative;
 }
 
 .frost-input:focus {
   background: rgba(255, 255, 255, 0.3);
-  border-color: rgba(194, 117, 58, 0.5);
+  border-color: rgba(255, 255, 255, 0.8);
   box-shadow:
-    0 0 0 2px rgba(194, 117, 58, 0.2),
-    inset 0 1px 0 rgba(255, 255, 255, 0.3);
+    inset 0 1px 0px rgba(255, 255, 255, 0.75),
+    0 0 0 2px rgba(194, 117, 58, 0.3);
   outline: none;
 }
 
