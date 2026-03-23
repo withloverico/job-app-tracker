@@ -4,6 +4,8 @@ import type { Application, Status, ParsedJob } from '../types'
 import { parseJob } from '../lib/api'
 import { findDuplicate, type DuplicateMatch } from '../lib/duplicates'
 import StatusSelect from './StatusSelect'
+import CustomSelect from './CustomSelect'
+import DatePicker from './DatePicker'
 import SkillInput from './SkillInput'
 
 interface AddJobModalProps {
@@ -346,10 +348,14 @@ export default function AddJobModal({
             </div>
             <div>
               <label className="block text-sm font-medium text-stone-600 mb-1">Pay Type</label>
-              <select value={salaryType} onChange={(e) => setSalaryType(e.target.value)} className={`${inputClass} appearance-none cursor-pointer`}>
-                <option value="annual">Annual</option>
-                <option value="hourly">Hourly</option>
-              </select>
+              <CustomSelect
+                value={salaryType}
+                onChange={setSalaryType}
+                options={[
+                  { value: 'annual', label: 'Annual' },
+                  { value: 'hourly', label: 'Hourly' },
+                ]}
+              />
             </div>
           </div>
 
@@ -373,22 +379,22 @@ export default function AddJobModal({
             </div>
             <div>
               <label className="block text-sm font-medium text-stone-600 mb-1">Date Applied</label>
-              <input type="date" value={dateApplied} onChange={(e) => setDateApplied(e.target.value)} className={inputClass} />
+              <DatePicker value={dateApplied} onChange={setDateApplied} placeholder="Select date" />
             </div>
             <div>
               <label className="block text-sm font-medium text-stone-600 mb-1">Follow-up Date</label>
-              <input type="date" value={followUpDate} onChange={(e) => setFollowUpDate(e.target.value)} className={inputClass} />
+              <DatePicker value={followUpDate} onChange={setFollowUpDate} placeholder="Select date" />
             </div>
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
               <label className="block text-sm font-medium text-stone-600 mb-1">Date Posted</label>
-              <input type="date" value={datePosted} onChange={(e) => setDatePosted(e.target.value)} className={inputClass} />
+              <DatePicker value={datePosted} onChange={setDatePosted} placeholder="Select date" />
             </div>
             <div>
               <label className="block text-sm font-medium text-stone-600 mb-1">Application Deadline</label>
-              <input type="date" value={applicationDeadline} onChange={(e) => setApplicationDeadline(e.target.value)} className={inputClass} />
+              <DatePicker value={applicationDeadline} onChange={setApplicationDeadline} placeholder="Select date" />
             </div>
           </div>
 
