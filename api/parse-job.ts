@@ -33,13 +33,45 @@ export default async function handler(req: any, res: any) {
         }
 
         const html = await response.text()
-        content = html
+
+        // Extract JSON-LD structured data (most job sites embed this for SEO)
+        const jsonLdBlocks: string[] = []
+        const jsonLdRegex = /<script[^>]*type=["']application\/ld\+json["'][^>]*>([\s\S]*?)<\/script>/gi
+        let match
+        while ((match = jsonLdRegex.exec(html)) !== null) {
+          try {
+            const data = JSON.parse(match[1])
+            // Handle both single objects and arrays
+            const items = Array.isArray(data) ? data : [data]
+            for (const item of items) {
+              if (
+                item['@type'] === 'JobPosting' ||
+                item['@type']?.includes?.('JobPosting')
+              ) {
+                jsonLdBlocks.push(JSON.stringify(item))
+              }
+            }
+          } catch {
+            // Skip malformed JSON-LD
+          }
+        }
+
+        // Strip HTML to plain text
+        const plainText = html
           .replace(/<script[\s\S]*?<\/script>/gi, '')
           .replace(/<style[\s\S]*?<\/style>/gi, '')
           .replace(/<[^>]+>/g, ' ')
           .replace(/\s+/g, ' ')
           .trim()
-          .slice(0, 30000)
+
+        // Combine JSON-LD (rich structured data) with plain text (catches everything else)
+        const parts: string[] = []
+        if (jsonLdBlocks.length > 0) {
+          parts.push('STRUCTURED DATA:\n' + jsonLdBlocks.join('\n'))
+        }
+        parts.push('PAGE TEXT:\n' + plainText)
+
+        content = parts.join('\n\n').slice(0, 30000)
       } catch {
         return res.status(200).json({
           error: 'Could not fetch the job posting. The site may be blocking automated requests.',
