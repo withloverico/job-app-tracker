@@ -1,5 +1,5 @@
 import { supabase } from './supabase'
-import type { Application, ParsedJob } from '../types'
+import type { Application, ParsedJob, Status, StatusHistoryEntry } from '../types'
 
 async function getAuthHeaders(): Promise<Record<string, string>> {
   const { data } = await supabase.auth.getSession()
@@ -63,6 +63,32 @@ export async function updateApplication(
     method: 'PATCH',
     headers,
     body: JSON.stringify(updates),
+  })
+  if (res.status === 401) throw new Error('Unauthorized')
+  const json = await res.json()
+  if (json.error) throw new Error(json.error)
+  return json.data
+}
+
+export async function fetchStatusHistory(applicationId: string): Promise<StatusHistoryEntry[]> {
+  const headers = await getAuthHeaders()
+  const res = await fetch(`/api/applications/${applicationId}/status-history`, { headers })
+  if (res.status === 401) throw new Error('Unauthorized')
+  const json = await res.json()
+  if (json.error) throw new Error(json.error)
+  return json.data
+}
+
+export async function changeApplicationStatus(
+  applicationId: string,
+  newStatus: Status,
+  note?: string
+): Promise<{ application: Application; historyEntry: StatusHistoryEntry }> {
+  const headers = await getAuthHeaders()
+  const res = await fetch(`/api/applications/${applicationId}/status-history`, {
+    method: 'POST',
+    headers,
+    body: JSON.stringify({ new_status: newStatus, note: note || null }),
   })
   if (res.status === 401) throw new Error('Unauthorized')
   const json = await res.json()

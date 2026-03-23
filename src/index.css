@@ -67,7 +67,7 @@ body {
 
 /* Stronger variant for modals or highlighted elements */
 .frost-strong {
-  background: rgba(255, 255, 255, 0.85);
+  background: rgba(255, 255, 255, 0.93);
   backdrop-filter: blur(32px) saturate(140%) brightness(1.1);
   -webkit-backdrop-filter: blur(32px) saturate(140%) brightness(1.1);
   box-shadow:
@@ -105,6 +105,55 @@ body {
     inset 0 2px 4px rgba(0, 0, 0, 0.05),
     0 0 0 3px rgba(194, 117, 58, 0.3);
   outline: none;
+}
+
+/* Flip card modal entrance */
+@keyframes flipIn {
+  0% {
+    opacity: 0;
+    transform: perspective(800px) rotateY(-90deg) scale(0.9);
+  }
+  100% {
+    opacity: 1;
+    transform: perspective(800px) rotateY(0deg) scale(1);
+  }
+}
+
+@keyframes flipOut {
+  0% {
+    opacity: 1;
+    transform: perspective(800px) rotateY(0deg) scale(1);
+  }
+  100% {
+    opacity: 0;
+    transform: perspective(800px) rotateY(90deg) scale(0.9);
+  }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes fadeOut {
+  from { opacity: 1; }
+  to { opacity: 0; }
+}
+
+.flip-card-modal {
+  animation: flipIn 0.4s cubic-bezier(0.4, 0, 0.2, 1) both;
+}
+
+.flip-card-modal.closing {
+  animation: flipOut 0.35s cubic-bezier(0.4, 0, 0.2, 1) both;
+}
+
+.flip-backdrop {
+  animation: fadeIn 0.3s ease both;
+}
+
+.flip-backdrop.closing {
+  animation: fadeOut 0.3s ease both;
 }
 
 /* Hide scrollbar for status bar */

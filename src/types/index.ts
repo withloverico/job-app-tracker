@@ -29,6 +29,7 @@ export interface Application {
   notes: string | null
   date_applied: string | null
   follow_up_date: string | null
+  date_posted: string | null
 }
 
 export interface ParsedJob {
@@ -44,6 +45,17 @@ export interface ParsedJob {
   nice_to_have_skills: string[] | null
   application_deadline: string | null
   job_summary: string | null
+  date_posted: string | null
+}
+
+export interface StatusHistoryEntry {
+  id: string
+  application_id: string
+  user_id: string
+  old_status: Status
+  new_status: Status
+  note: string | null
+  created_at: string
 }
 
 export const STATUSES: Status[] = [

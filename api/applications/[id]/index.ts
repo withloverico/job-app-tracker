@@ -1,4 +1,4 @@
-import { verifyAuth, getServiceSupabase } from '../_lib/auth.js'
+import { verifyAuth, getServiceSupabase } from '../../_lib/auth.js'
 
 export default async function handler(req: any, res: any) {
   try {

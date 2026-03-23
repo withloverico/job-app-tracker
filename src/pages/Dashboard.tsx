@@ -10,12 +10,16 @@ import {
   ExternalLink,
   ArrowUpDown,
   Trash2,
+  Pencil,
 } from 'lucide-react'
-import type { Application } from '../types'
+import type { Application, Status, StatusHistoryEntry } from '../types'
 import { STATUSES, STATUS_DOT_COLORS } from '../types'
+import { fetchStatusHistory } from '../lib/api'
 import { useApplications } from '../hooks/useApplications'
 import Header from '../components/Header'
-import StatusBadge from '../components/StatusBadge'
+import StatusDropdown from '../components/StatusDropdown'
+import StatusChangeNotePopup from '../components/StatusChangeNotePopup'
+import StatusTimeline from '../components/StatusTimeline'
 import AddJobModal from '../components/AddJobModal'
 import ConfirmDialog from '../components/ConfirmDialog'
 
@@ -37,10 +41,39 @@ function formatSalary(app: Application): string | null {
 }
 
 export default function Dashboard() {
-  const { applications, loading, add, update, remove } = useApplications()
+  const { applications, loading, add, update, remove, changeStatus } = useApplications()
   const [modalOpen, setModalOpen] = useState(false)
   const [editingApp, setEditingApp] = useState<Application | null>(null)
   const [deletingApp, setDeletingApp] = useState<Application | null>(null)
+  const [flippedCard, setFlippedCard] = useState<string | null>(null)
+  const [closingCard, setClosingCard] = useState(false)
+  const [statusChangeTarget, setStatusChangeTarget] = useState<{
+    appId: string
+    oldStatus: Status
+    newStatus: Status
+  } | null>(null)
+  const [statusHistory, setStatusHistory] = useState<StatusHistoryEntry[]>([])
+  const [historyLoading, setHistoryLoading] = useState(false)
+
+  useEffect(() => {
+    if (flippedCard) {
+      setHistoryLoading(true)
+      fetchStatusHistory(flippedCard)
+        .then(setStatusHistory)
+        .catch(() => setStatusHistory([]))
+        .finally(() => setHistoryLoading(false))
+    } else {
+      setStatusHistory([])
+    }
+  }, [flippedCard])
+
+  const closeFlippedCard = useCallback(() => {
+    setClosingCard(true)
+    setTimeout(() => {
+      setFlippedCard(null)
+      setClosingCard(false)
+    }, 350)
+  }, [])
   const [search, setSearch] = useState('')
   const [statusFilter, setStatusFilter] = useState<string>('all')
   const [sortField, setSortField] = useState<SortField>('created_at')
@@ -123,10 +156,11 @@ export default function Dashboard() {
   }
 
   return (
-    <div className="min-h-dvh flex flex-col overflow-x-hidden">
+    <div className="h-dvh flex flex-col overflow-hidden">
       <Header />
 
-      <main className="w-full max-w-7xl mx-auto px-4 sm:px-6 py-6">
+      <main className="flex-1 overflow-y-auto overflow-x-hidden pt-14 pb-16">
+        <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 py-6">
         {/* Status summary bar */}
         <div className="flex gap-2 overflow-x-auto pb-2 mb-6 scrollbar-hide">
           {STATUSES.map((s) => (
@@ -192,12 +226,24 @@ export default function Dashboard() {
               setEditingApp(null)
               setModalOpen(true)
             }}
-            className="flex items-center gap-2 px-4 py-2 bg-amber-700 hover:bg-amber-600 text-white text-sm font-medium rounded-lg transition-colors shadow-sm flex-shrink-0"
+            className="hidden sm:flex items-center gap-2 px-4 py-2 bg-amber-700 hover:bg-amber-600 text-white text-sm font-medium rounded-lg transition-colors shadow-sm flex-shrink-0"
           >
             <Plus className="w-4 h-4" />
-            <span className="hidden sm:inline">Add Job</span>
+            Add Job
           </button>
         </div>
+
+        {/* Mobile Add Job button */}
+        <button
+          onClick={() => {
+            setEditingApp(null)
+            setModalOpen(true)
+          }}
+          className="sm:hidden flex items-center justify-center gap-2 w-full mb-6 px-4 py-2.5 bg-amber-700 hover:bg-amber-600 text-white text-sm font-medium rounded-lg transition-colors shadow-sm"
+        >
+          <Plus className="w-4 h-4" />
+          Add Job
+        </button>
 
         {/* Loading */}
         {loading && (
@@ -248,9 +294,10 @@ export default function Dashboard() {
             {filtered.map((app) => (
               <div
                 key={app.id}
-                onClick={() => openEdit(app)}
-                className="frost-strong rounded-xl p-4 hover:bg-white/40 transition-all cursor-pointer group shadow-sm"
+                onClick={() => setFlippedCard(app.id)}
+                className="frost-strong rounded-xl p-4 sm:p-5 h-52 sm:h-64 overflow-hidden cursor-pointer group shadow-sm hover:bg-white/40 transition-colors flex flex-col"
               >
+                {/* Card content */}
                 <div className="flex items-start justify-between mb-3">
                   <div className="min-w-0 flex-1">
                     <h3 className="text-stone-800 font-medium truncate group-hover:text-amber-800 transition-colors">
@@ -258,10 +305,20 @@ export default function Dashboard() {
                     </h3>
                     <p className="text-stone-500 text-sm truncate">{app.company_name}</p>
                   </div>
-                  <StatusBadge status={app.status} className="ml-2 flex-shrink-0" />
+                  <StatusDropdown
+                    status={app.status}
+                    className="ml-2 flex-shrink-0"
+                    onSelect={(newStatus) => {
+                      setStatusChangeTarget({
+                        appId: app.id,
+                        oldStatus: app.status,
+                        newStatus,
+                      })
+                    }}
+                  />
                 </div>
 
-                <div className="space-y-1.5 text-sm text-stone-500">
+                <div className="space-y-1.5 text-sm text-stone-500 flex-1 min-h-0 overflow-hidden">
                   {(app.location || app.is_remote) && (
                     <div className="flex items-center gap-1.5">
                       <MapPin className="w-3.5 h-3.5 flex-shrink-0" />
@@ -276,6 +333,12 @@ export default function Dashboard() {
                   {formatSalary(app) && (
                     <p className="text-emerald-700 text-xs font-medium">{formatSalary(app)}</p>
                   )}
+                  {app.date_posted && (
+                    <div className="flex items-center gap-1.5 text-xs">
+                      <Calendar className="w-3.5 h-3.5 flex-shrink-0" />
+                      Posted: {new Date(app.date_posted).toLocaleDateString()}
+                    </div>
+                  )}
                   {app.application_deadline && (
                     <div className="flex items-center gap-1.5 text-xs">
                       <Calendar className="w-3.5 h-3.5 flex-shrink-0" />
@@ -284,11 +347,24 @@ export default function Dashboard() {
                   )}
                 </div>
 
-                <div className="mt-3 flex items-center justify-between">
-                  <span className="text-xs text-stone-400">
-                    {new Date(app.created_at).toLocaleDateString()}
+                {/* Footer bar */}
+                <div className="flex items-center justify-between mt-auto pt-2 flex-shrink-0">
+                  <span className="text-xs font-medium text-emerald-800 rounded-full px-2.5 py-0.5 shadow-sm bg-emerald-100/70 backdrop-blur-sm border border-emerald-200/50">
+                    Added: {new Date(app.created_at).toLocaleDateString()}
                   </span>
                   <div className="flex items-center gap-2 sm:opacity-0 sm:group-hover:opacity-100 transition-opacity">
+                    {app.job_url && (
+                      <a
+                        href={app.job_url}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        onClick={(e) => e.stopPropagation()}
+                        className="text-xs text-stone-400 hover:text-stone-600 transition-colors"
+                        title="View job posting"
+                      >
+                        <ExternalLink className="w-3.5 h-3.5" />
+                      </a>
+                    )}
                     <button
                       onClick={(e) => {
                         e.stopPropagation()
@@ -311,6 +387,128 @@ export default function Dashboard() {
             ))}
           </div>
         )}
+
+        {/* Flipped card detail modal */}
+        {flippedCard && (() => {
+          const app = applications.find(a => a.id === flippedCard)
+          if (!app) return null
+          return (
+            <div className="fixed inset-0 z-50 flex items-center justify-center p-4" onClick={closeFlippedCard}>
+              <div className={`fixed inset-0 bg-black/30 backdrop-blur-sm flip-backdrop ${closingCard ? 'closing' : ''}`} />
+              <div
+                onClick={(e) => e.stopPropagation()}
+                className={`relative frost-strong rounded-2xl w-full max-w-lg sm:max-w-xl shadow-xl flip-card-modal ${closingCard ? 'closing' : ''} p-5 sm:p-8 max-h-[80vh] overflow-y-auto`}
+              >
+                {/* Header with Edit button */}
+                <div className="flex items-start justify-between mb-4">
+                  <div className="min-w-0 flex-1">
+                    <h3 className="text-lg sm:text-xl font-semibold text-stone-800">{app.job_title}</h3>
+                    <p className="text-stone-500 text-sm sm:text-base">{app.company_name}</p>
+                  </div>
+                  <button
+                    onClick={() => {
+                      setFlippedCard(null)
+                      setClosingCard(false)
+                      openEdit(app)
+                    }}
+                    className="flex items-center gap-1.5 px-3 py-1.5 bg-amber-700 hover:bg-amber-600 text-white text-xs font-medium rounded-full transition-colors shadow-sm flex-shrink-0 ml-3"
+                  >
+                    <Pencil className="w-3 h-3" />
+                    Edit
+                  </button>
+                </div>
+
+                {/* Status & meta */}
+                <div className="flex flex-wrap items-center gap-2 mb-4">
+                  <StatusDropdown
+                    status={app.status}
+                    onSelect={(newStatus) => {
+                      setStatusChangeTarget({
+                        appId: app.id,
+                        oldStatus: app.status,
+                        newStatus,
+                      })
+                    }}
+                  />
+                  {(app.location || app.is_remote) && (
+                    <span className="text-xs text-stone-500 flex items-center gap-1">
+                      <MapPin className="w-3 h-3" />
+                      {app.location}{app.is_remote && ' (Remote)'}
+                    </span>
+                  )}
+                  {formatSalary(app) && (
+                    <span className="text-xs font-medium text-emerald-700">{formatSalary(app)}</span>
+                  )}
+                </div>
+
+                {app.job_summary && (
+                  <div className="mb-4">
+                    <p className="text-xs font-medium text-stone-600 mb-1">Summary</p>
+                    <p className="text-sm text-stone-600 leading-relaxed">{app.job_summary}</p>
+                  </div>
+                )}
+
+                {app.required_skills.length > 0 && (
+                  <div className="mb-4">
+                    <p className="text-xs font-medium text-stone-600 mb-1.5">Required Skills</p>
+                    <div className="flex flex-wrap gap-1.5">
+                      {app.required_skills.map((skill) => (
+                        <span key={skill} className="text-xs px-2.5 py-1 rounded-full bg-amber-100/80 text-amber-800 border border-amber-200/50">
+                          {skill}
+                        </span>
+                      ))}
+                    </div>
+                  </div>
+                )}
+
+                {app.nice_to_have_skills.length > 0 && (
+                  <div className="mb-4">
+                    <p className="text-xs font-medium text-stone-600 mb-1.5">Nice to Have</p>
+                    <div className="flex flex-wrap gap-1.5">
+                      {app.nice_to_have_skills.map((skill) => (
+                        <span key={skill} className="text-xs px-2.5 py-1 rounded-full bg-stone-100/80 text-stone-600 border border-stone-200/50">
+                          {skill}
+                        </span>
+                      ))}
+                    </div>
+                  </div>
+                )}
+
+                {app.notes && (
+                  <div className="mb-4">
+                    <p className="text-xs font-medium text-stone-600 mb-1">Notes</p>
+                    <p className="text-sm text-stone-500 italic">{app.notes}</p>
+                  </div>
+                )}
+
+                {/* Status Timeline */}
+                <div className="mb-4">
+                  <p className="text-xs font-medium text-stone-600 mb-2">Status History</p>
+                  {historyLoading ? (
+                    <div className="flex justify-center py-3">
+                      <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-amber-700" />
+                    </div>
+                  ) : (
+                    <StatusTimeline history={statusHistory} createdAt={app.created_at} />
+                  )}
+                </div>
+
+                {/* Footer meta */}
+                <div className="flex flex-wrap gap-3 text-xs text-stone-400 pt-2 border-t border-stone-200/50">
+                  {app.date_posted && <span>Posted: {new Date(app.date_posted).toLocaleDateString()}</span>}
+                  {app.application_deadline && <span>Deadline: {new Date(app.application_deadline).toLocaleDateString()}</span>}
+                  {app.date_applied && <span>Applied: {new Date(app.date_applied).toLocaleDateString()}</span>}
+                  <span>Added: {new Date(app.created_at).toLocaleDateString()}</span>
+                  {app.job_url && (
+                    <a href={app.job_url} target="_blank" rel="noopener noreferrer" className="text-amber-700 hover:text-amber-600 flex items-center gap-1">
+                      Job posting <ExternalLink className="w-3 h-3" />
+                    </a>
+                  )}
+                </div>
+              </div>
+            </div>
+          )
+        })()}
 
         {/* Table View */}
         {!loading && filtered.length > 0 && viewMode === 'table' && (
@@ -380,14 +578,15 @@ export default function Dashboard() {
             </table>
           </div>
         )}
+        </div>
       </main>
 
-      <footer className="mt-auto flex justify-center px-4 py-6">
+      <footer className="fixed bottom-0 left-0 right-0 z-40 flex justify-center px-4 py-3 pointer-events-none">
         <a
           href="https://linkedin.com/in/ricobolos"
           target="_blank"
           rel="noopener noreferrer"
-          className="frost rounded-full px-4 py-2 text-xs text-stone-500 hover:text-stone-700 transition-colors shadow-sm"
+          className="frost rounded-full px-4 py-2 text-xs text-stone-500 hover:text-stone-700 transition-colors shadow-sm pointer-events-auto"
         >
           Built with love by <span className="font-medium text-stone-700">Rico Bolos</span>
         </a>
@@ -416,6 +615,18 @@ export default function Dashboard() {
         }}
         onCancel={() => setDeletingApp(null)}
       />
+
+      {statusChangeTarget && (
+        <StatusChangeNotePopup
+          oldStatus={statusChangeTarget.oldStatus}
+          newStatus={statusChangeTarget.newStatus}
+          onSave={async (note) => {
+            await changeStatus(statusChangeTarget.appId, statusChangeTarget.newStatus, note)
+            setStatusChangeTarget(null)
+          }}
+          onCancel={() => setStatusChangeTarget(null)}
+        />
+      )}
     </div>
   )
 }

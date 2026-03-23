@@ -83,6 +83,7 @@ export default async function handler(req: any, res: any) {
 - required_skills (array of strings)
 - nice_to_have_skills (array of strings)
 - application_deadline (ISO date string or null)
+- date_posted (ISO date string or null — when the job was originally posted)
 - job_summary (2-3 sentence summary of the role)
 
 Return null for any field that cannot be found. Here is the job posting text:

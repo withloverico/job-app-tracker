@@ -21,7 +21,7 @@ export default function Header() {
   const displayName = user?.user_metadata?.full_name as string | undefined || user?.email
 
   return (
-    <header className="sticky top-0 z-40 frost-strong" style={{ borderRadius: 0 }}>
+    <header className="fixed top-0 left-0 right-0 z-40 frost-strong" style={{ borderRadius: 0 }}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 h-14 flex items-center justify-between">
         <a href="/" className="flex items-center gap-2 text-stone-800 font-semibold text-lg">
           <Briefcase className="w-5 h-5 text-amber-700" />
@@ -31,7 +31,7 @@ export default function Header() {
         <div className="relative" ref={menuRef}>
           <button
             onClick={() => setMenuOpen(!menuOpen)}
-            className="flex items-center gap-2 rounded-full hover:ring-2 hover:ring-amber-600/30 transition-all"
+            className="flex items-center gap-2 rounded-full hover:ring-2 hover:ring-amber-600/30 transition-all pr-1"
           >
             {avatarUrl ? (
               <img
@@ -45,6 +45,9 @@ export default function Header() {
                 {displayName?.[0]?.toUpperCase() || '?'}
               </div>
             )}
+            <span className="hidden sm:inline text-sm font-medium text-stone-700 max-w-[120px] truncate">
+              {displayName}
+            </span>
           </button>
 
           {menuOpen && (

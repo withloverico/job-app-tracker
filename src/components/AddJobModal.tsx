@@ -44,6 +44,7 @@ export default function AddJobModal({
   const [notes, setNotes] = useState('')
   const [dateApplied, setDateApplied] = useState('')
   const [followUpDate, setFollowUpDate] = useState('')
+  const [datePosted, setDatePosted] = useState('')
 
   useEffect(() => {
     if (editingApp) {
@@ -64,6 +65,7 @@ export default function AddJobModal({
       setNotes(editingApp.notes || '')
       setDateApplied(editingApp.date_applied || '')
       setFollowUpDate(editingApp.follow_up_date || '')
+      setDatePosted(editingApp.date_posted || '')
       setDuplicate(null)
     } else {
       resetForm()
@@ -88,6 +90,7 @@ export default function AddJobModal({
     setNotes('')
     setDateApplied('')
     setFollowUpDate('')
+    setDatePosted('')
     setShowFallback(false)
     setFallbackText('')
     setDuplicate(null)
@@ -106,6 +109,7 @@ export default function AddJobModal({
     if (data.required_skills) setRequiredSkills(data.required_skills)
     if (data.nice_to_have_skills) setNiceToHaveSkills(data.nice_to_have_skills)
     if (data.application_deadline) setApplicationDeadline(data.application_deadline)
+    if (data.date_posted) setDatePosted(data.date_posted)
     if (data.job_summary) setJobSummary(data.job_summary)
 
     const match = findDuplicate(
@@ -172,6 +176,7 @@ export default function AddJobModal({
       notes: notes || null,
       date_applied: dateApplied || null,
       follow_up_date: followUpDate || null,
+      date_posted: datePosted || null,
     }
 
     const result = await onSave(data)
@@ -366,9 +371,15 @@ export default function AddJobModal({
             </div>
           </div>
 
-          <div>
-            <label className="block text-sm font-medium text-stone-600 mb-1">Application Deadline</label>
-            <input type="date" value={applicationDeadline} onChange={(e) => setApplicationDeadline(e.target.value)} className={inputClass} />
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div>
+              <label className="block text-sm font-medium text-stone-600 mb-1">Date Posted</label>
+              <input type="date" value={datePosted} onChange={(e) => setDatePosted(e.target.value)} className={inputClass} />
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-stone-600 mb-1">Application Deadline</label>
+              <input type="date" value={applicationDeadline} onChange={(e) => setApplicationDeadline(e.target.value)} className={inputClass} />
+            </div>
           </div>
 
           <div>
