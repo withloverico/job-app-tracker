@@ -202,11 +202,12 @@ export default function LoginPage() {
       </div>
 
       {/* Content sections */}
-      <div className="px-4 pb-20">
+      <main className="px-4 pb-20">
         {/* Why Section */}
-        <div
+        <section
           id="why"
           ref={(el) => { sectionRefs.current['why'] = el }}
+          aria-label="Why use job tracker"
           className="max-w-3xl mx-auto text-center mb-20"
         >
           <div className={`frost-strong rounded-2xl p-8 sm:p-10 shadow-sm ${popClass('why')}`} style={{ animationDelay: '0.15s' }}>
@@ -221,12 +222,13 @@ export default function LoginPage() {
               from discovery to offer.
             </p>
           </div>
-        </div>
+        </section>
 
         {/* Features Grid */}
-        <div
+        <section
           id="features"
           ref={(el) => { sectionRefs.current['features'] = el }}
+          aria-label="Features"
           className="max-w-5xl mx-auto grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 mb-24"
         >
           {features.map((f, i) => (
@@ -244,12 +246,13 @@ export default function LoginPage() {
               <p className="text-sm sm:text-base text-stone-500 leading-relaxed">{f.desc}</p>
             </div>
           ))}
-        </div>
+        </section>
 
         {/* How It Works */}
-        <div
+        <section
           id="how"
           ref={(el) => { sectionRefs.current['how'] = el }}
+          aria-label="How it works"
           className="max-w-3xl mx-auto mb-24"
         >
           <h2 className="text-2xl sm:text-3xl font-bold text-stone-800 text-glow text-center mb-10">
@@ -277,12 +280,13 @@ export default function LoginPage() {
               </div>
             ))}
           </div>
-        </div>
+        </section>
 
         {/* CTA */}
-        <div
+        <section
           id="cta"
           ref={(el) => { sectionRefs.current['cta'] = el }}
+          aria-label="Get started"
           className="max-w-2xl mx-auto text-center mb-24"
         >
           <div className={`frost-strong rounded-2xl p-8 sm:p-12 shadow-lg ${popClass('cta')}`} style={{ animationDelay: '0.15s' }}>
@@ -300,12 +304,13 @@ export default function LoginPage() {
               <ArrowRight className="w-5 h-5" />
             </button>
           </div>
-        </div>
+        </section>
 
         {/* Built With */}
-        <div
+        <section
           id="tech"
           ref={(el) => { sectionRefs.current['tech'] = el }}
+          aria-label="Tech stack"
           className="max-w-3xl mx-auto text-center mb-12"
         >
           <h2 className="text-2xl sm:text-3xl font-bold text-stone-800 text-glow text-center mb-8">
@@ -337,8 +342,8 @@ export default function LoginPage() {
               <ExternalLink className="w-3.5 h-3.5" />
             </a>
           </div>
-        </div>
-      </div>
+        </section>
+      </main>
     </div>
   )
 }
