@@ -123,10 +123,10 @@ export default function Dashboard() {
   }
 
   return (
-    <div className="min-h-dvh flex flex-col">
+    <div className="min-h-dvh flex flex-col overflow-x-hidden">
       <Header />
 
-      <main className="max-w-7xl mx-auto px-4 sm:px-6 py-6">
+      <main className="w-full max-w-7xl mx-auto px-4 sm:px-6 py-6">
         {/* Status summary bar */}
         <div className="flex gap-2 overflow-x-auto pb-2 mb-6 scrollbar-hide">
           {STATUSES.map((s) => (
@@ -159,9 +159,9 @@ export default function Dashboard() {
             />
           </div>
 
-          <div className="flex gap-2 flex-wrap">
-            <div className="relative flex-1 min-w-[120px] sm:flex-none">
-              <ArrowUpDown className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-stone-400 pointer-events-none" />
+          <div className="flex gap-2">
+            <div className="relative flex-1 sm:flex-none">
+              <ArrowUpDown className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-stone-400 pointer-events-none z-10" />
               <select
                 value={sortField}
                 onChange={(e) => setSortField(e.target.value as SortField)}
@@ -173,7 +173,7 @@ export default function Dashboard() {
               </select>
             </div>
 
-            <div className="flex frost rounded-lg overflow-hidden">
+            <div className="flex frost rounded-lg">
               <button
                 onClick={() => setViewMode('card')}
                 className={`p-2 transition-colors ${viewMode === 'card' ? 'bg-white/50 text-stone-800' : 'text-stone-500 hover:text-stone-800'}`}
@@ -193,7 +193,7 @@ export default function Dashboard() {
                 setEditingApp(null)
                 setModalOpen(true)
               }}
-              className="flex items-center gap-2 px-4 py-2 bg-amber-700 hover:bg-amber-600 text-white text-sm font-medium rounded-lg transition-colors shadow-sm"
+              className="flex items-center gap-2 px-4 py-2 bg-amber-700 hover:bg-amber-600 text-white text-sm font-medium rounded-lg transition-colors shadow-sm flex-shrink-0"
             >
               <Plus className="w-4 h-4" />
               <span className="hidden sm:inline">Add Job</span>
@@ -384,7 +384,7 @@ export default function Dashboard() {
         )}
       </main>
 
-      <footer className="mt-auto flex justify-center py-6">
+      <footer className="mt-auto flex justify-center px-4 py-6">
         <a
           href="https://linkedin.com/in/ricobolos"
           target="_blank"
