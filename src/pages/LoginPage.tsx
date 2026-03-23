@@ -49,7 +49,7 @@ export default function LoginPage() {
   const [scrollOpacity, setScrollOpacity] = useState(1)
   const [line1Done, setLine1Done] = useState(false)
   const [visibleSections, setVisibleSections] = useState<Set<string>>(new Set())
-  const sectionRefs = useRef<Record<string, HTMLDivElement | null>>({})
+  const sectionRefs = useRef<Record<string, HTMLElement | null>>({})
 
   useEffect(() => {
     const observer = new IntersectionObserver(
