@@ -21,7 +21,7 @@ interface StatusTimelineProps {
 export default function StatusTimeline({ history, createdAt }: StatusTimelineProps) {
   if (history.length === 0) {
     return (
-      <div className="text-xs text-stone-400 italic">
+      <div className="text-xs sm:text-sm text-stone-400 italic">
         No status changes recorded yet.
       </div>
     )
@@ -37,10 +37,10 @@ export default function StatusTimeline({ history, createdAt }: StatusTimelinePro
         <div className="flex gap-3 items-start">
           <div className={`w-2.5 h-2.5 rounded-full mt-1 flex-shrink-0 ring-2 ring-white/80 ${STATUS_DOT_COLORS[history[0].old_status]}`} />
           <div>
-            <p className="text-xs text-stone-500">
+            <p className="text-xs sm:text-sm text-stone-500">
               Created as <span className="font-medium text-stone-700">{history[0].old_status}</span>
             </p>
-            <p className="text-xs text-stone-400">{timeAgo(createdAt)}</p>
+            <p className="text-xs sm:text-sm text-stone-400">{timeAgo(createdAt)}</p>
           </div>
         </div>
 
@@ -48,7 +48,7 @@ export default function StatusTimeline({ history, createdAt }: StatusTimelinePro
           <div key={entry.id} className="flex gap-3 items-start">
             <div className={`w-2.5 h-2.5 rounded-full mt-1 flex-shrink-0 ring-2 ring-white/80 ${STATUS_DOT_COLORS[entry.new_status]}`} />
             <div className="min-w-0">
-              <p className="text-xs text-stone-600">
+              <p className="text-xs sm:text-sm text-stone-600">
                 <span className="text-stone-400">{entry.old_status}</span>
                 {' '}
                 <span className="text-stone-400">&rarr;</span>
@@ -56,9 +56,9 @@ export default function StatusTimeline({ history, createdAt }: StatusTimelinePro
                 <span className="font-medium text-stone-700">{entry.new_status}</span>
               </p>
               {entry.note && (
-                <p className="text-xs text-stone-500 italic mt-0.5">{entry.note}</p>
+                <p className="text-xs sm:text-sm text-stone-500 italic mt-0.5">{entry.note}</p>
               )}
-              <p className="text-xs text-stone-400 mt-0.5">{timeAgo(entry.created_at)}</p>
+              <p className="text-xs sm:text-sm text-stone-400 mt-0.5">{timeAgo(entry.created_at)}</p>
             </div>
           </div>
         ))}

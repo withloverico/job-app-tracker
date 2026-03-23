@@ -53,19 +53,21 @@ export default function Dashboard() {
     oldStatus: Status
     newStatus: Status
   } | null>(null)
-  const [statusHistory, setStatusHistory] = useState<StatusHistoryEntry[]>([])
+  const [historyCache, setHistoryCache] = useState<Record<string, StatusHistoryEntry[]>>({})
   const [historyLoading, setHistoryLoading] = useState(false)
 
+  const statusHistory = flippedCard ? historyCache[flippedCard] || [] : []
+
   useEffect(() => {
-    if (flippedCard) {
-      setHistoryLoading(true)
-      fetchStatusHistory(flippedCard)
-        .then(setStatusHistory)
-        .catch(() => setStatusHistory([]))
-        .finally(() => setHistoryLoading(false))
-    } else {
-      setStatusHistory([])
-    }
+    if (!flippedCard) return
+    const hasCached = !!historyCache[flippedCard]
+    if (!hasCached) setHistoryLoading(true)
+    fetchStatusHistory(flippedCard)
+      .then((data) => setHistoryCache(prev => ({ ...prev, [flippedCard]: data })))
+      .catch(() => {
+        if (!hasCached) setHistoryCache(prev => ({ ...prev, [flippedCard]: [] }))
+      })
+      .finally(() => setHistoryLoading(false))
   }, [flippedCard])
 
   const closeFlippedCard = useCallback(() => {
@@ -412,7 +414,7 @@ export default function Dashboard() {
                       setClosingCard(false)
                       openEdit(app)
                     }}
-                    className="flex items-center gap-1.5 px-3 py-1.5 bg-amber-700 hover:bg-amber-600 text-white text-xs font-medium rounded-full transition-colors shadow-sm flex-shrink-0 ml-3"
+                    className="flex items-center gap-1.5 px-3 sm:px-4 py-1.5 sm:py-2 bg-amber-700 hover:bg-amber-600 text-white text-xs sm:text-sm font-medium rounded-full transition-colors shadow-sm flex-shrink-0 ml-3"
                   >
                     <Pencil className="w-3 h-3" />
                     Edit
@@ -432,29 +434,29 @@ export default function Dashboard() {
                     }}
                   />
                   {(app.location || app.is_remote) && (
-                    <span className="text-xs text-stone-500 flex items-center gap-1">
-                      <MapPin className="w-3 h-3" />
+                    <span className="text-xs sm:text-sm text-stone-500 flex items-center gap-1">
+                      <MapPin className="w-3 sm:w-4 h-3 sm:h-4" />
                       {app.location}{app.is_remote && ' (Remote)'}
                     </span>
                   )}
                   {formatSalary(app) && (
-                    <span className="text-xs font-medium text-emerald-700">{formatSalary(app)}</span>
+                    <span className="text-xs sm:text-sm font-medium text-emerald-700">{formatSalary(app)}</span>
                   )}
                 </div>
 
                 {app.job_summary && (
                   <div className="mb-4">
-                    <p className="text-xs font-medium text-stone-600 mb-1">Summary</p>
-                    <p className="text-sm text-stone-600 leading-relaxed">{app.job_summary}</p>
+                    <p className="text-xs sm:text-sm font-medium text-stone-600 mb-1">Summary</p>
+                    <p className="text-sm sm:text-base text-stone-600 leading-relaxed">{app.job_summary}</p>
                   </div>
                 )}
 
                 {app.required_skills.length > 0 && (
                   <div className="mb-4">
-                    <p className="text-xs font-medium text-stone-600 mb-1.5">Required Skills</p>
-                    <div className="flex flex-wrap gap-1.5">
+                    <p className="text-xs sm:text-sm font-medium text-stone-600 mb-1.5">Required Skills</p>
+                    <div className="flex flex-wrap gap-1.5 sm:gap-2">
                       {app.required_skills.map((skill) => (
-                        <span key={skill} className="text-xs px-2.5 py-1 rounded-full bg-amber-100/80 text-amber-800 border border-amber-200/50">
+                        <span key={skill} className="text-xs sm:text-sm px-2.5 sm:px-3 py-1 sm:py-1.5 rounded-full bg-amber-100/80 text-amber-800 border border-amber-200/50">
                           {skill}
                         </span>
                       ))}
@@ -464,10 +466,10 @@ export default function Dashboard() {
 
                 {app.nice_to_have_skills.length > 0 && (
                   <div className="mb-4">
-                    <p className="text-xs font-medium text-stone-600 mb-1.5">Nice to Have</p>
-                    <div className="flex flex-wrap gap-1.5">
+                    <p className="text-xs sm:text-sm font-medium text-stone-600 mb-1.5">Nice to Have</p>
+                    <div className="flex flex-wrap gap-1.5 sm:gap-2">
                       {app.nice_to_have_skills.map((skill) => (
-                        <span key={skill} className="text-xs px-2.5 py-1 rounded-full bg-stone-100/80 text-stone-600 border border-stone-200/50">
+                        <span key={skill} className="text-xs sm:text-sm px-2.5 sm:px-3 py-1 sm:py-1.5 rounded-full bg-stone-100/80 text-stone-600 border border-stone-200/50">
                           {skill}
                         </span>
                       ))}
@@ -477,14 +479,14 @@ export default function Dashboard() {
 
                 {app.notes && (
                   <div className="mb-4">
-                    <p className="text-xs font-medium text-stone-600 mb-1">Notes</p>
-                    <p className="text-sm text-stone-500 italic">{app.notes}</p>
+                    <p className="text-xs sm:text-sm font-medium text-stone-600 mb-1">Notes</p>
+                    <p className="text-sm sm:text-base text-stone-500 italic">{app.notes}</p>
                   </div>
                 )}
 
                 {/* Status Timeline */}
                 <div className="mb-4">
-                  <p className="text-xs font-medium text-stone-600 mb-2">Status History</p>
+                  <p className="text-xs sm:text-sm font-medium text-stone-600 mb-2">Status History</p>
                   {historyLoading ? (
                     <div className="flex justify-center py-3">
                       <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-amber-700" />
@@ -495,7 +497,7 @@ export default function Dashboard() {
                 </div>
 
                 {/* Footer meta */}
-                <div className="flex flex-wrap gap-3 text-xs text-stone-400 pt-2 border-t border-stone-200/50">
+                <div className="flex flex-wrap gap-3 text-xs sm:text-sm text-stone-400 pt-2 border-t border-stone-200/50">
                   {app.date_posted && <span>Posted: {new Date(app.date_posted).toLocaleDateString()}</span>}
                   {app.application_deadline && <span>Deadline: {new Date(app.application_deadline).toLocaleDateString()}</span>}
                   {app.date_applied && <span>Applied: {new Date(app.date_applied).toLocaleDateString()}</span>}
@@ -622,7 +624,13 @@ export default function Dashboard() {
           oldStatus={statusChangeTarget.oldStatus}
           newStatus={statusChangeTarget.newStatus}
           onSave={async (note) => {
-            await changeStatus(statusChangeTarget.appId, statusChangeTarget.newStatus, note)
+            const result = await changeStatus(statusChangeTarget.appId, statusChangeTarget.newStatus, note)
+            if (result?.historyEntry) {
+              setHistoryCache(prev => ({
+                ...prev,
+                [statusChangeTarget.appId]: [...(prev[statusChangeTarget.appId] || []), result.historyEntry],
+              }))
+            }
             setStatusChangeTarget(null)
           }}
           onCancel={() => setStatusChangeTarget(null)}
