@@ -12,8 +12,8 @@ import {
 import type { Application, Status } from '../types'
 import { fetchApplications, updateApplication, deleteApplication } from '../lib/api'
 import Header from '../components/Header'
-import StatusSelect from '../components/StatusSelect'
-import SkillChip from '../components/SkillChip'
+import StatusSelect from '../components/form/StatusSelect'
+import SkillChip from '../components/form/SkillChip'
 import ConfirmDialog from '../components/ConfirmDialog'
 import toast from 'react-hot-toast'
 

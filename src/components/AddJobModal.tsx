@@ -3,10 +3,10 @@ import { X, Loader2, AlertTriangle, Link as LinkIcon } from 'lucide-react'
 import type { Application, Status, ParsedJob } from '../types'
 import { parseJob } from '../lib/api'
 import { findDuplicate, type DuplicateMatch } from '../lib/duplicates'
-import StatusSelect from './StatusSelect'
-import CustomSelect from './CustomSelect'
-import DatePicker from './DatePicker'
-import SkillInput from './SkillInput'
+import StatusSelect from './form/StatusSelect'
+import CustomSelect from './form/CustomSelect'
+import DatePicker from './form/DatePicker'
+import SkillInput from './form/SkillInput'
 
 interface AddJobModalProps {
   open: boolean
