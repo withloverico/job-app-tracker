@@ -193,9 +193,9 @@ export default function AddJobModal({
   const inputClass = "w-full frost-input text-stone-800 rounded-lg px-3 py-2 text-sm placeholder:text-stone-400"
 
   return (
-    <div className="fixed inset-0 z-50 flex items-start justify-center p-4 pt-[5vh] overflow-y-auto">
+    <div className="fixed inset-0 z-50 flex items-start justify-center p-0 sm:p-4 sm:pt-[5vh] overflow-y-auto">
       <div className="fixed inset-0 bg-black/30 backdrop-blur-sm" onClick={onClose} />
-      <div className="relative frost-strong rounded-2xl w-full max-w-2xl shadow-xl mb-8">
+      <div className="relative frost-strong sm:rounded-2xl w-full max-w-2xl shadow-xl min-h-dvh sm:min-h-0 sm:mb-8">
         <div className="flex items-center justify-between p-4 border-b border-stone-200/50">
           <h2 className="text-lg font-semibold text-stone-800">
             {editingApp ? 'Edit Application' : 'Add Application'}

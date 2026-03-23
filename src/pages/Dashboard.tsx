@@ -159,13 +159,13 @@ export default function Dashboard() {
             />
           </div>
 
-          <div className="flex gap-2">
-            <div className="relative">
+          <div className="flex gap-2 flex-wrap">
+            <div className="relative flex-1 min-w-[120px] sm:flex-none">
               <ArrowUpDown className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-stone-400 pointer-events-none" />
               <select
                 value={sortField}
                 onChange={(e) => setSortField(e.target.value as SortField)}
-                className="appearance-none frost-input text-stone-800 rounded-lg pl-9 pr-8 py-2 text-sm cursor-pointer"
+                className="appearance-none frost-input text-stone-800 rounded-lg pl-9 pr-8 py-2 text-sm cursor-pointer w-full"
               >
                 <option value="created_at">Date Added</option>
                 <option value="application_deadline">Deadline</option>
@@ -238,7 +238,9 @@ export default function Dashboard() {
         {/* No results */}
         {!loading && applications.length > 0 && filtered.length === 0 && (
           <div className="text-center py-12">
-            <p className="text-stone-500">No applications match your filters.</p>
+            <div className="frost rounded-2xl p-6 max-w-sm mx-auto shadow-sm">
+              <p className="text-stone-500">No applications match your filters.</p>
+            </div>
           </div>
         )}
 
@@ -288,7 +290,7 @@ export default function Dashboard() {
                   <span className="text-xs text-stone-400">
                     {new Date(app.created_at).toLocaleDateString()}
                   </span>
-                  <div className="flex items-center gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
+                  <div className="flex items-center gap-2 sm:opacity-0 sm:group-hover:opacity-100 transition-opacity">
                     <button
                       onClick={(e) => {
                         e.stopPropagation()
