@@ -250,6 +250,15 @@ export default function AddJobModal({
                   )}
                 </button>
               </div>
+              {!showFallback && (
+                <button
+                  type="button"
+                  onClick={() => setShowFallback(true)}
+                  className="text-xs text-amber-700 hover:text-amber-900 underline mt-1 transition-colors"
+                >
+                  Paste job description instead
+                </button>
+              )}
             </div>
           )}
 
