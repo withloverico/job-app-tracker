@@ -2,8 +2,6 @@
 
 A glassmorphism-styled job application tracker with AI-powered job posting extraction, Google OAuth, and a frosted glass UI. Paste a job URL and let Claude parse the title, company, salary, equity, and resume-ready skills automatically.
 
-**Live:** [jobtracker.withloverico.me](https://jobtracker.withloverico.me)
-
 ## Features
 
 - **AI Job Parsing** — Paste a URL, Claude extracts company, title, location, salary, equity, skills, and summary
